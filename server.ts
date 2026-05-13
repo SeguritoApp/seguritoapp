@@ -411,8 +411,26 @@ async function startServer() {
       next();
     });
     
-    app.use(express.static(distPath));
+    app.use(express.static(distPath, {
+      setHeaders: (res, path) => {
+        if (path.endsWith('.html')) {
+          res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+          res.setHeader('Pragma', 'no-cache');
+          res.setHeader('Expires', '0');
+        } else if (path.includes('/assets/')) {
+          // Assets are hashed so they can be cached indefinitely
+          res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+        }
+      }
+    }));
+    
+    // If an asset is not found by the static middleware, return a 404 instead of falling back to index.html
+    app.get('/assets/*', (req, res) => {
+      res.status(404).send('Asset not found');
+    });
+
     app.get('*', (req, res) => {
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       res.sendFile(path.join(distPath, 'index.html'));
     });
   }
