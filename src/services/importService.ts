@@ -71,7 +71,7 @@ let aiClient: GoogleGenAI | null = null;
 const getAI = () => {
   if (!aiClient) {
     // Use strict literal matching for Vite's replace plugin
-    const key = process.env.GEMINI_API_KEY || import.meta.env.VITE_GEMINI_API_KEY;
+    const key = process.env.GEMINI_API_KEY || (import.meta as any).env.VITE_GEMINI_API_KEY;
     if (!key) {
       console.warn("GEMINI_API_KEY is not defined. AI mapping may fail. Make sure it is injected by the bundler or environment.");
     }

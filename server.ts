@@ -402,6 +402,14 @@ async function startServer() {
     } else {
       distPath = path.join(process.cwd(), 'dist');
     }
+    console.log("Serving static files from:", distPath);
+    
+    app.use((req, res, next) => {
+      if (req.url.startsWith('/assets/')) {
+        console.log(`[STATIC] Requesting ${req.url} from ${distPath}`);
+      }
+      next();
+    });
     
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
