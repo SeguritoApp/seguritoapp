@@ -1,0 +1,355 @@
+{
+  "entities": {
+    "user": {
+      "title": "User",
+      "description": "App user profile with plan details",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "displayName": { "type": "string" },
+        "planType": { "type": "string", "enum": ["free", "basico", "avanzado", "profesional", "corporativo"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "professionalTitle": { "type": "string" },
+        "professionalLicense": { "type": "string" },
+        "signatureURL": { "type": "string" },
+        "corporateAdminId": { "type": "string" },
+        "trialStartDate": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "planType", "createdAt"]
+    },
+    "client": {
+      "title": "Client",
+      "description": "Business client managed by the prevencionista",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "rut": { "type": "string" },
+        "industry": { "type": "string" },
+        "address": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "delegateName": { "type": "string" },
+        "delegateRut": { "type": "string" },
+        "delegateEmail": { "type": "string" },
+        "delegatePhone": { "type": "string" }
+      },
+      "required": ["name", "ownerId", "createdAt"]
+    },
+    "worker": {
+      "title": "Worker",
+      "description": "Employee record within a client company",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "clientId": { "type": "string" },
+        "firstName": { "type": "string" },
+        "paternalLastName": { "type": "string" },
+        "maternalLastName": { "type": "string" },
+        "rut": { "type": "string" },
+        "birthDate": { "type": "string", "format": "date" },
+        "incorporationDate": { "type": "string", "format": "date" },
+        "address": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "position": { "type": "string" },
+        "status": { "type": "string", "enum": ["active", "inactive"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["clientId", "firstName", "rut", "status"]
+    },
+    "inspection": {
+      "title": "Inspection",
+      "description": "Decreto 594 inspection record",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "employeeCount": { "type": "number" },
+        "actualToilets": { "type": "number" },
+        "actualShowers": { "type": "number" },
+        "extinguishers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "expiryDate": { "type": "string", "format": "date" },
+              "type": { "type": "string" }
+            }
+          }
+        },
+        "status": { "type": "string", "enum": ["draft", "final"] },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" }
+      },
+      "required": ["clientId", "authorId", "date"]
+    },
+    "accident": {
+      "title": "Accident",
+      "description": "Decreto 67 accident report",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "workerName": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "daysLost": { "type": "number" },
+        "invalidityDegree": { "type": "number" }
+      },
+      "required": ["clientId", "authorId", "workerName", "date"]
+    },
+    "iper_matrix": {
+      "title": "IPER Matrix",
+      "description": "Decreto 44 risk identification matrix",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "risks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "templateId": { "type": "string" },
+              "probability": { "type": "number" },
+              "consequence": { "type": "number" },
+              "imageUrl": { "type": "string" },
+              "pinX": { "type": "number" },
+              "pinY": { "type": "number" }
+            }
+          }
+        }
+      },
+      "required": ["clientId", "authorId", "createdAt"]
+    },
+    "daily_usage": {
+      "title": "Daily Usage",
+      "description": "Tracks movements per user per day",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "date": { "type": "string" },
+        "count": { "type": "number" }
+      },
+      "required": ["userId", "date", "count"]
+    },
+    "gantt_task": {
+      "title": "Gantt Task",
+      "description": "Scheduled activity for a client",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "title": { "type": "string" },
+        "startDate": { "type": "string", "format": "date" },
+        "endDate": { "type": "string", "format": "date" },
+        "status": { "type": "string", "enum": ["pending", "in_progress", "completed"] },
+        "assignedTo": { "type": "string" }
+      },
+      "required": ["clientId", "title", "startDate"]
+    },
+    "client_stats": {
+      "title": "Client Stats Summary",
+      "description": "Aggregated metrics for a client for fast loading",
+      "type": "object",
+      "properties": {
+        "workerCount": { "type": "number" },
+        "inspectionCount": { "type": "number" },
+        "accidentCount": { "type": "number" },
+        "ganttCompliance": { "type": "number" },
+        "lastInspectionDate": { "type": "string", "format": "date-time" },
+        "lastAccidentDate": { "type": "string", "format": "date-time" },
+        "grdCount": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      }
+    },
+    "grd_inspection": {
+      "title": "GRD Inspection",
+      "description": "Disaster Risk Reduction audit record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "clientId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "date": { "type": "string", "format": "date-time" },
+        "complianceScore": { "type": "number" },
+        "responses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "qId": { "type": "number" },
+              "status": { "type": "string", "enum": ["SI", "NO", "N/A"] },
+              "observation": { "type": "string" }
+            }
+          }
+        },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["clientId", "authorId", "date", "responses"]
+    },
+    "client_report": {
+      "title": "Client Report",
+      "description": "Historical record of generated PDF reports",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "title": { "type": "string" },
+        "type": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "authorName": { "type": "string" },
+        "pdfName": { "type": "string" },
+        "dataSnapshot": { "type": "object" },
+        "headerSnapshot": { "type": "object" }
+      },
+      "required": ["clientId", "title", "type", "createdAt"]
+    },
+    "miper_record": {
+      "title": "MIPER Record",
+      "description": "Individual risk row within MIPER",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "proceso": { "type": "string" },
+        "puestosTrabajo": { "type": "string" },
+        "tareaNombre": { "type": "string" }
+      },
+      "required": ["clientId", "createdAt"]
+    },
+    "miper_document": {
+      "title": "MIPER Document",
+      "description": "Comprehensive risk evaluation document",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "createdAt": { "type": "any" },
+        "aprobadoPor": { "type": "string" },
+        "records": { "type": "array" }
+      }
+    },
+    "irl_template": {
+      "title": "IRL Template",
+      "description": "Job specific risk induction template",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "cargo": { "type": "string" },
+        "riesgosGenerales": { "type": "array" }
+      }
+    },
+    "irl_record": {
+      "title": "IRL Record",
+      "description": "Evidence of risk induction delivery",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "workerId": { "type": "string" },
+        "templateId": { "type": "string" },
+        "templateSnapshot": { "type": "object" }
+      }
+    },
+    "diep_record": {
+      "title": "DIEP Record",
+      "description": "Denuncia Individual de Enfermedad Profesional",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "worker": { "type": "object" },
+        "disease": { "type": "object" },
+        "employer": { "type": "object" },
+        "reporter": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "signature": { "type": "string" }
+      }
+    },
+    "diat_record": {
+      "title": "DIAT Record",
+      "description": "Denuncia Individual de Accidente del Trabajo",
+      "type": "object",
+      "properties": {
+        "clientId": { "type": "string" },
+        "worker": { "type": "object" },
+        "accident": { "type": "object" },
+        "employer": { "type": "object" },
+        "reporter": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "signature": { "type": "string" }
+      }
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "user",
+      "description": "User profile documents"
+    },
+    "/clients/{clientId}": {
+      "schema": "client",
+      "description": "Companies managed by users"
+    },
+    "/clients/{clientId}/stats/summary": {
+      "schema": "client_stats",
+      "description": "Aggregated stats for the client"
+    },
+    "/clients/{clientId}/inspections/{inspectionId}": {
+      "schema": "inspection",
+      "description": "Inspection reports for a client"
+    },
+    "/clients/{clientId}/accidents/{accidentId}": {
+      "schema": "accident",
+      "description": "Accident reports for a client"
+    },
+    "/clients/{clientId}/iper_matrices/{matrixId}": {
+      "schema": "iper_matrix",
+      "description": "IPER matrices for a client"
+    },
+    "/clients/{clientId}/workers/{workerId}": {
+      "schema": "worker",
+      "description": "Employee records for a client"
+    },
+    "/clients/{clientId}/gantt_tasks/{taskId}": {
+      "schema": "gantt_task",
+      "description": "Planning tasks for a client"
+    },
+    "/usage/{usageId}": {
+      "schema": "daily_usage",
+      "description": "Daily movement tracking usageId=userId_YYYY-MM-DD"
+    },
+    "/clients/{clientId}/grd_inspections/{grdId}": {
+      "schema": "grd_inspection",
+      "description": "GRD audit records for a client"
+    },
+    "/clients/{clientId}/reports/{reportId}": {
+      "schema": "client_report",
+      "description": "Unified report history"
+    },
+    "/clients/{clientId}/miper_risks/{riskId}": {
+      "schema": "miper_record",
+      "description": "MIPER risk row records"
+    },
+    "/clients/{clientId}/miper/{miperId}": {
+      "schema": "miper_document",
+      "description": "MIPER evaluations"
+    },
+    "/clients/{clientId}/irl_templates/{templateId}": {
+      "schema": "irl_template",
+      "description": "Risk templates"
+    },
+    "/clients/{clientId}/irl_records/{recordId}": {
+      "schema": "irl_record",
+      "description": "Induction records"
+    },
+    "/clients/{clientId}/diep_records/{recordId}": {
+      "schema": "diep_record",
+      "description": "DIEP records"
+    },
+    "/clients/{clientId}/diat_records/{recordId}": {
+      "schema": "diat_record",
+      "description": "DIAT records"
+    }
+  }
+}

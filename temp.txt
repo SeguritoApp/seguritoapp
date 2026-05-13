@@ -1,0 +1,26 @@
+  signatureURL?: string;
+    signatureURL: profile?.signatureURL || "",
+    profile?.professionalLicense && profile?.signatureURL
+    signatureURL: profile?.signatureURL || "",
+        setFormData({ ...formData, signatureURL: reader.result as string });
+      setFormData({ ...formData, signatureURL: dataURL });
+    setFormData({ ...formData, signatureURL: "" });
+                    ) : formData.signatureURL ? (
+                        src={formData.signatureURL}
+                  {formData.signatureURL && (
+      signatureURL: profile?.signatureURL,
+    if (!profile?.signatureURL || !profile?.professionalLicense) {
+      signatureURL: profile?.signatureURL,
+    if (!profile?.signatureURL) {
+        signatureURL: profile?.signatureURL || "",
+                            signatureURL: profile?.signatureURL || "",
+                          signatureURL: profile?.signatureURL || "",
+                        signatureURL: profile?.signatureURL || "",
+                              signatureURL: profile?.signatureURL || "",
+                              signatureURL: profile?.signatureURL || "",
+      signatureURL: profile?.signatureURL,
+    if (!profile?.signatureURL || !profile?.professionalLicense) {
+      signatureURL: profile?.signatureURL || "",
+      signatureURL: profile.signatureURL,
+      signatureURL: profile.signatureURL,
+      signatureURL: profile.signatureURL,

@@ -1,0 +1,23 @@
+7024:              {plan.features.map((feature, idx) => (
+7192:       updatedWorkCenters = updatedWorkCenters.map(wc => wc.id === id ? { ...wc, name } : wc);
+7280:          .map(d => ({id: d.id, ...d.data()}))
+7306:        setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Worker));
+7319:        setReports(s.docs.map((d) => ({ id: d.id, ...d.data() }) as ClientReport));
+7348:              items: massiveEppItems.filter(i => i.name.trim() !== "").map(i => ({id: i.id, name: i.name, classification: "", category: "", type: "", deliveryType: "initial", usefulLifeGaranteeDays: 0, stockMin: 0, observation: ""}))
+7410:          affectedWorkers: affectedWorkers.map(w => ({ id: w.id, name: `${w.firstName} ${w.paternalLastName}`, rut: w.rut })),
+7509:        incidents: (formData.incidents || []).map((inc) =>
+8057:            {filteredWorkers.map((w) => (
+8239:                {currentClientCtx?.workCenters?.map((wc, idx) => (
+8258:                                setSelectedWorkerIds(workers.filter(w => w.workCenterId === selectedMassiveWorkCenter && w.status === 'active').map(w => w.id));
+8266:                        {workers.filter(w => w.workCenterId === selectedMassiveWorkCenter && w.status === 'active').map(w => (
+8329:                      {massiveEppItems.map((item, idx) => (
+8723:                      {currentClientCtx?.workCenters?.map((wc, idx) => (
+8968:                    {(formData.incidents || []).map((inc: any) => (
+9104:                    {(formData.eppRecords || []).map((record: EppRecord) => (
+9188:                          .map((t: any) => (
+9257:                        workerIRLs.filter((irl) => irl.workerId === editingWorker.id).map((irl) => (
+9526:                  {currentClientCtx?.workCenters?.map((wc, idx) => (
+9651:                    {currentClientCtx?.workCenters?.map((wc, idx) => (
+9691:                                    setSelectedWorkerIdsToAssign(filtered.map(w => w.id));
+9700:                            {filtered.map(w => {
+9791:                  {reassigningWorkersTarget.map(w => (

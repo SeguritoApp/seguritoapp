@@ -1,0 +1,38 @@
+3241:          const snap = await getDocs(q);
+3307:            const snap = await fetchWithCache(`gantt_tasks_snap_${client.id}`, () => getDocs(query(collection(db, `clients/${client.id}/gantt_tasks`))));
+4455:          const snapshot = await fetchWithCache(`gantt_tasks_snap_${selectedClientId}`, () => getDocs(q));
+5930:            fetchWithCache(`library_reports_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/reports`), orderBy("createdAt", "desc"), limit(50)))),
+5931:            fetchWithCache(`library_diep_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/diep_records`), orderBy("createdAt", "desc"), limit(50)))),
+5932:            fetchWithCache(`library_diat_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/diat_records`), orderBy("createdAt", "desc"), limit(50)))),
+5933:            fetchWithCache(`library_irl_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/irl_records`), orderBy("createdAt", "desc"), limit(50)))),
+5995:          fetchWithCache(`workers_${selectedClientId}_all`, () => getDocs(query(collection(db, `clients/${selectedClientId}/workers`)))),
+5996:          fetchWithCache(`gantt_tasks_snap_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/gantt_tasks`)))),
+5997:          fetchWithCache(`iper_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/iper_matrices`), limit(1)))),
+5998:          fetchWithCache(`inspections_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/inspections`), orderBy("createdAt", "desc"), limit(50)))),
+5999:          fetchWithCache(`grd_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/grd_inspections`), orderBy("date", "desc"), limit(50)))),
+6000:          fetchWithCache(`minsal_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/minsal_audits`), orderBy("date", "desc"), limit(50)))),
+6303:          const snap = await fetchWithCache(`miper_risks_${selectedClientId}`, () => getDocs(riesgosRef));
+6361:          const snapAcc = await fetchWithCache(`accidents_${selectedClientId}`, () => getDocs(accsRef));
+6419:          const snapInsp = await fetchWithCache(`inspections_${selectedClientId}`, () => getDocs(inspRef));
+6444:          const snapGrd = await fetchWithCache(`grd_${selectedClientId}`, () => getDocs(grdRef));
+6466:          const snapMinsal = await fetchWithCache(`minsal_${selectedClientId}`, () => getDocs(minsalRef));
+7988:        fetchWithCache(`library_reports_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/reports`), orderBy("createdAt", "desc")))),
+7989:        fetchWithCache(`library_irl_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/irl_records`)))),
+9454:          const sWorkers = await fetchWithCache(`workers_50_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/workers`), orderBy('createdAt', 'desc'), limit(50))));
+11647:                      const snapshot = await fetchWithCache(`workers_${selectedClientId}_wc_${selectedCentralizedWcId || 'all'}`, () => getDocs(qWorkers));
+13592:        const s = await fetchWithCache(`library_reports_all_${selectedClientId}`, () => getDocs(qReports));
+14212:          const oldMiperSnap = await fetchWithCache(`old_miper_${selectedClientId}`, () => getDocs(oldMiperQuery));
+14242:          const s = await fetchWithCache(`miper_risks_${selectedClientId}`, () => getDocs(qMiper));
+14276:        const s = await fetchWithCache(`library_reports_all_${selectedClientId}`, () => getDocs(qReports));
+16031:          const s = await fetchWithCache(`miper_${selectedClientId}`, () => getDocs(q));
+16488:        const s = await fetchWithCache(`irl_templates_${selectedClientId}`, () => getDocs(q));
+16846:          fetchWithCache(`irl_templates_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/irl_templates`)))),
+16847:          fetchWithCache(`library_irl_${selectedClientId}`, () => getDocs(query(collection(db, `clients/${selectedClientId}/irl_records`)))),
+17624:        const sWorkers = await fetchWithCache(`workers_${selectedClientId}_all`, () => getDocs(qWorkers));
+17633:        const sReports = await fetchWithCache(`library_reports_all_${selectedClientId}`, () => getDocs(qReports));
+18516:        const s = await fetchWithCache(`generic_inspections_${selectedClientId}`, () => getDocs(q));
+19065:        const s = await fetchWithCache(`minsal_audits_${selectedClientId}`, () => getDocs(q));
+19094:        const s = await fetchWithCache(`custom_minsal_protocols_${selectedClientId}`, () => getDocs(q));
+20230:        () => getDocs(query(collection(db, `clients/${selectedClientId}/workers`)))
+22418:          const snapshot = await fetchWithCache(`dashboard_clients_${targetOwnerId}`, () => getDocs(q));
+22739:        () => getDocs(query(collection(db, `clients/${selectedClientId}/workers`)))

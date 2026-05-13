@@ -1,0 +1,88 @@
+871:                  <option key={c.id} value={c.id}>
+889:                  <option key={w.id} value={w.id}>
+938:                  <tr key={index} className="hover:bg-slate-50/50">
+1350:                    <option key={c.id} value={c.id}>
+1386:                          <option key={w.id} value={w.id}>
+2478:              key={currentView}
+3167:                    key={alert.id}
+3288:                key={client.id}
+3816:                    <div key={wc.id} className="bg-orange-50 border border-orange-200 text-orange-800 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-3">
+3895:            <div key={letter} className="relative">
+3910:                    key={client.id}
+4396:                    key={idx}
+4431:                      key={idx}
+4461:                      key={task.id}
+4511:                            key={mIdx}
+4895:              key={step}
+4911:            key={`content-${step}`}
+6308:                    key={i}
+6389:                    key={i}
+6667:                  key={record.id}
+6981:            key={plan.id}
+7025:                <div key={idx} className="flex items-center gap-3">
+8058:              <div key={w.id} className="group p-4 lg:px-6 lg:py-4 hover:bg-slate-50 transition-colors flex flex-col lg:grid lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr_200px] lg:items-center gap-4 relative">
+8240:                  <option key={wc.id} value={wc.id}>{wc.name}</option>
+8267:                          <label key={w.id} className="flex items-center gap-3 p-3 border border-slate-100 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+8330:                        <div key={item.id} className="flex gap-3 items-center">
+8724:                        <option key={wc.id} value={wc.id}>{wc.name}</option>
+8970:                        key={inc.id}
+9106:                        key={record.id}
+9189:                          <div key={t.id} className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col md:flex-row justify-between md:items-center gap-4 shadow-sm hover:border-blue-300 transition-all">
+9258:                          <div key={irl.id} className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex justify-between items-center shadow-sm hover:border-orange-300 transition-all">
+9527:                    <div key={wc.id} className="flex items-center justify-between bg-white border border-slate-200 p-3 rounded-xl hover:border-orange-200 transition-colors">
+9652:                       <option key={wc.id} value={wc.id}>{wc.name}</option>
+9703:                                <label key={w.id} className={`flex items-center gap-4 p-4 border-b border-slate-100 last:border-0 cursor-pointer hover:bg-white transition-colors ${isCurrentlyInThisWc ? 'opacity-50 grayscale bg-slate-50/50' : 'bg-white'}`}>
+9792:                    <div key={w.id} className="text-xs font-bold text-slate-700 py-1 border-b border-slate-100 last:border-0 truncate">
+10219:                    <option key={c.id} value={c.id}>
+10289:                  key={key}
+10352:                    key={item.id}
+10588:                    key={e.id}
+11003:                <option key={c.id} value={c.id}>
+11038:                key={req.id}
+11630:                key={record.id}
+11860:                                  <option key={c} value={c}>
+11899:                                  <option key={f} value={f}>
+11947:                                  <option key={r.codigo} value={r.especifico}>
+12228:                                key={item.path}
+12519:                key={report.id}
+12640:              key={c.id}
+12900:          <section key={cat.key} className="max-w-5xl">
+12945:                    key={risk.id}
+13124:                    key={mr.id}
+13259:        key={editingTemplate.id}
+13313:              key={t.id}
+13370:                  key={t.id}
+13741:                    <option key={w.id} value={w.id}>
+13760:                    <option key={t.id} value={t.id}>
+13924:                key={r.id}
+14112:            key={c.id}
+14416:            <option key={c.id} value={c.id}>
+14662:                      key={idx}
+15064:                key={c.id}
+15142:                key={insp.id}
+15226:              <div key={q.id} className="relative group">
+15273:                            key={opt}
+15615:                key={c.id}
+15699:                key={audit.id}
+15775:                      key={p.id}
+15786:                  key={p.id}
+15819:                        key={it.id}
+15876:                <div key={protocol.id} className="space-y-6">
+15933:                          key={item.id}
+15962:                                    key={opt}
+16055:                      <div key={item.id} className="flex gap-2 items-center">
+16418:                        key={w.id}
+16493:                    key={dis.id}
+16680:                    key={t}
+17132:                      key={c}
+18443:                key={client.id}
+18893:                        key={w.id}
+18968:                    key={acc.id}
+19172:                    key={p}
+19203:                    key={t}
+19472:                      key={u}
+19822:                        key={opt}
+19859:                      key={t}
+19895:                          key={dt}
+19931:                            key={mp}
+20009:                    key={c}

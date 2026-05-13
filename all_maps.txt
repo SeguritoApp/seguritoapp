@@ -1,0 +1,1026 @@
+482:  if (Array.isArray(obj)) return obj.map(cleanForFirestore);
+483-  const cleaned: any = {};
+484-  for (const key in obj) {
+485-    const val = obj[key];
+486-    // Remove undefined values
+487-    if (val !== undefined) {
+--
+589:        auth.currentUser?.providerData?.map((provider) => ({
+590-          providerId: provider.providerId,
+591-          email: provider.email,
+592-        })) || [],
+593-    },
+594-    operationType,
+--
+738:        DEFAULT_EPP_ITEMS.map((name) => ({
+739-          id: doc(collection(db, "_")).id,
+740-          name,
+741-          deliveryDate1: "",
+742-          returnDate1: "",
+743-          deliveryDate2: "",
+--
+760:      setWorkers(s.docs.map((d) => ({ ...d.data(), id: d.id }) as Worker));
+761-    });
+762-    return () => unsub();
+763-  }, [selectedClientId]);
+764-
+765-  const handleSave = async () => {
+--
+870:                {clients.map((c) => (
+871-                  <option key={c.id} value={c.id}>
+872-                    {c.name}
+873-                  </option>
+874-                ))}
+875-              </select>
+--
+888:                {workers.map((w) => (
+889-                  <option key={w.id} value={w.id}>
+890-                    {w.rut} - {w.firstName} {w.paternalLastName}
+891-                  </option>
+892-                ))}
+893-              </select>
+--
+937:                {items.map((item, index) => (
+938-                  <tr key={index} className="hover:bg-slate-50/50">
+939-                    <td className="px-4 py-2">
+940-                      <input
+941-                        type="text"
+942-                        value={item.name}
+--
+1126:        setWorkers(s.docs.map((d) => ({ ...d.data(), id: d.id }) as Worker));
+1127-      });
+1128-    } else {
+1129-      setWorkers([]);
+1130-    }
+1131-  }, [selectedClientId]);
+--
+1349:                  {clients.map((c) => (
+1350-                    <option key={c.id} value={c.id}>
+1351-                      {c.name} - {c.rut}
+1352-                    </option>
+1353-                  ))}
+1354-                </select>
+--
+1385:                        {workers.map((w) => (
+1386-                          <option key={w.id} value={w.id}>
+1387-                            {w.firstName} {w.paternalLastName} ({w.rut})
+1388-                          </option>
+1389-                        ))}
+1390-                      </select>
+--
+1813:          snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id }) as Client),
+1814-        );
+1815-      },
+1816-      (error) => handleFirestoreError(error, "list", "clients"),
+1817-    );
+1818-    return () => unsubscribe();
+--
+2964:        const clientsList = s.docs.map(
+2965-          (doc) => ({ ...doc.data(), id: doc.id }) as Client,
+2966-        );
+2967-
+2968-        const totalInspections = clientsList.reduce(
+2969-          (acc, c) => acc + (c.metadata?.inspectionCount || 0),
+--
+2986:        setClientsInfo(clientsList.map((c) => ({ id: c.id, name: c.name })));
+2987-      },
+2988-      (error) => handleFirestoreError(error, "list", "clients"),
+2989-    );
+2990-
+2991-    return () => {
+--
+3016:          .map((d) => {
+3017-            const data = d.data();
+3018-            const endDate = new Date(`${data.endDate}T23:59:59`);
+3019-            const diffTime = endDate.getTime() - now.getTime();
+3020-            const diffDays = Math.ceil(diffTime / (1000 * 3600 * 24));
+3021-            const alertThreshold =
+--
+3165:                alerts.slice(0, 10).map((alert) => (
+3166-                  <div
+3167-                    key={alert.id}
+3168-                    className="p-4 flex items-center gap-4 hover:bg-slate-50 transition-colors"
+3169-                  >
+3170-                    <div
+--
+3255:          s.docs.map((d) => ({ ...d.data(), id: d.id }) as Client),
+3256-        );
+3257-      },
+3258-      (error) => handleFirestoreError(error, "list", "clients"),
+3259-    );
+3260-  }, [user?.uid]);
+--
+3286:            {recentClients.map((client) => (
+3287-              <tr
+3288-                key={client.id}
+3289-                className="hover:bg-slate-50/50 transition-colors"
+3290-              >
+3291-                <td className="px-6 py-4">
+--
+3815:                  {newClient.workCenters.map((wc, idx) => (
+3816-                    <div key={wc.id || `wc-${idx}`} className="bg-orange-50 border border-orange-200 text-orange-800 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-3">
+3817-                      {wc.name}
+3818-                      <button
+3819-                        type="button"
+3820-                        className="text-orange-400 hover:text-red-500 transition-colors"
+--
+3894:          sortedLetters.map((letter) => (
+3895-            <div key={letter} className="relative">
+3896-              {/* Alphabetical Headline */}
+3897-              <div className="flex items-center gap-6 mb-8 sticky top-[120px] z-30 py-4 pointer-events-none">
+3898-                <div className="w-16 h-16 bg-white border-4 border-slate-100 text-slate-900 rounded-[1.5rem] flex items-center justify-center text-3xl font-black shadow-xl italic shadow-slate-200/50 pointer-events-auto">
+3899-                  {letter}
+--
+3908:                {groupedClients[letter].map((client) => (
+3909-                  <motion.div
+3910-                    key={client.id}
+3911-                    whileHover={{
+3912-                      x: 10,
+3913-                      backgroundColor: "rgba(248, 250, 252, 0.8)",
+--
+4051:      const data = snapshot.docs.map(
+4052-        (doc) => ({ ...doc.data(), id: doc.id }) as GanttTask,
+4053-      );
+4054-      setTasks(data.sort((a, b) => a.startDate.localeCompare(b.startDate)));
+4055-    });
+4056-    return () => unsubscribe();
+--
+4394:                {scaleCols.map((col, idx) => (
+4395-                  <div
+4396-                    key={idx}
+4397-                    className="p-3 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center border-r border-slate-200 last:border-r-0 flex items-center justify-center"
+4398-                  >
+4399-                    {col}
+--
+4429:                  {new Array(scaleCols.length).fill(0).map((_, idx) => (
+4430-                    <div
+4431-                      key={idx}
+4432-                      className="h-full min-h-[24px] border-r border-slate-100/50 last:border-r-0 relative flex items-center justify-center"
+4433-                    >
+4434-                      {idx === 0 && (
+--
+4448:                tasks.map((task) => {
+4449-                  const spans = getTaskSpanForScale(
+4450-                    task.startDate,
+4451-                    task.endDate,
+4452-                    timeScale,
+4453-                  );
+--
+4509:                        {spans.map((isSpanned, mIdx) => (
+4510-                          <div
+4511-                            key={mIdx}
+4512-                            className="h-full min-h-[24px] border-r border-slate-100/50 last:border-r-0 relative flex items-center justify-center group/cell"
+4513-                          >
+4514-                            {isSpanned && (
+--
+5367:          s.docs.map((d) => ({ ...d.data(), id: d.id }) as ClientReport),
+5368-        );
+5369-      },
+5370-      (e) => handleFirestoreError(e, "list", "reports"),
+5371-    );
+5372-
+--
+5379:      setDiepRecords(s.docs.map((d) => ({ ...d.data(), id: d.id }))),
+5380-    );
+5381-
+5382-    // Fetch DIAT Records
+5383-    const qDIAT = query(
+5384-      collection(db, `clients/${selectedClientId}/diat_records`),
+--
+5388:      setDiatRecords(s.docs.map((d) => ({ ...d.data(), id: d.id }))),
+5389-    );
+5390-
+5391-    // Fetch Latest Inspections
+5392-    const qInspections = query(
+5393-      collection(db, `clients/${selectedClientId}/inspections`),
+--
+5401:          s.docs.map((d) => ({ ...d.data(), id: d.id }) as Inspection),
+5402-        );
+5403-      },
+5404-      (e) => handleFirestoreError(e, "list", "inspections"),
+5405-    );
+5406-
+--
+5416:        setAccidents(s.docs.map((d) => ({ ...d.data(), id: d.id }) as any));
+5417-      },
+5418-      (e) => handleFirestoreError(e, "list", "accidents"),
+5419-    );
+5420-
+5421-    // Fetch Workers (All for full stats)
+--
+5428:        setWorkers(s.docs.map((d) => ({ ...d.data(), id: d.id }) as Worker));
+5429-        setLoading(false);
+5430-      },
+5431-      (e) => handleFirestoreError(e, "list", "workers"),
+5432-    );
+5433-
+--
+5441:        setTasks(s.docs.map((d) => ({ ...d.data(), id: d.id }) as GanttTask));
+5442-      },
+5443-      (e) => handleFirestoreError(e, "list", "gantt_tasks"),
+5444-    );
+5445-
+5446-    // Fetch IPER Risks
+--
+5470:        setIrlRecords(s.docs.map((d) => d.data()));
+5471-      },
+5472-      (e) => handleFirestoreError(e, "list", "irl_records"),
+5473-    );
+5474-
+5475-    // Fetch GRD Inspections (All for history and latest score)
+--
+5484:          s.docs.map((d) => ({ ...d.data(), id: d.id }) as GRDInspection),
+5485-        );
+5486-      },
+5487-      (e) => handleFirestoreError(e, "list", "grd_inspections"),
+5488-    );
+5489-
+--
+5499:          s.docs.map((d) => ({ ...d.data(), id: d.id }) as MinsalAudit),
+5500-        );
+5501-      },
+5502-      (e) => handleFirestoreError(e, "list", "minsal_audits"),
+5503-    );
+5504-
+--
+5522:    (w.incidents || []).map((i) => ({
+5523-      ...i,
+5524-      workerName: `${w.firstName} ${w.paternalLastName}`,
+5525-    })),
+5526-  );
+5527-  const totalIncidentsCount = allIncidents.length;
+--
+5691:    ...reports.map((r) => ({ ...r, libraryType: "report" as const })),
+5692:    ...diepRecords.map((d) => ({
+5693-      id: d.id,
+5694-      title: `DIEP - ${d.worker?.name || "Trabajador"}`,
+5695-      type: "diep" as const,
+5696-      createdAt: d.createdAt,
+5697-      authorName: d.reporter?.name || "Sistema",
+--
+5701:    ...diatRecords.map((d) => ({
+5702-      id: d.id,
+5703-      title: `DIAT - ${d.worker?.name || "Trabajador"}`,
+5704-      type: "diat" as const,
+5705-      createdAt: d.createdAt,
+5706-      authorName: d.reporter?.name || "Sistema",
+--
+5710:    ...irlRecords.map((irl) => ({
+5711-      id: irl.id,
+5712-      title: `IRL - ${irl.workerName || "Trabajador"} - ${irl.templateSnapshot?.cargo || "Cargo"}`,
+5713-      type: "irl" as const,
+5714-      createdAt: irl.createdAt,
+5715-      authorName: irl.relatorName || "Sistema",
+--
+5768:  const workersWithIRL = new Set(irlRecords.map((r) => r.workerId)).size;
+5769-  const irlRatio =
+5770-    workers.length > 0 ? (workersWithIRL / workers.length) * 100 : 0;
+5771-
+5772-  const handleExecuteFilteredReport = () => {
+5773-    if (!profile?.signatureURL || !profile?.professionalLicense) {
+--
+5854:          accidents: filteredAccidents.map((a) => ({
+5855-            date: a.date,
+5856-            description: a.description,
+5857-            type: a.type,
+5858-            daysLost: a.daysLost,
+5859-          })),
+--
+6305:              {Array.from({ length: Math.min(inspections.length, 5) }).map(
+6306-                (_, i) => (
+6307-                  <div
+6308-                    key={i}
+6309-                    className="flex-1 h-1.5 bg-green-500 rounded-full"
+6310-                  />
+--
+6386:              {Array.from({ length: Math.min(minsalAudits.length, 5) }).map(
+6387-                (_, i) => (
+6388-                  <div
+6389-                    key={i}
+6390-                    className="flex-1 h-1.5 bg-blue-500 rounded-full"
+6391-                  />
+--
+6665:              {filteredRecords.map((record) => (
+6666-                <div
+6667-                  key={record.id}
+6668-                  className={`px-8 py-5 flex items-center justify-between hover:bg-blue-50/30 transition-colors group ${selectedReportIds.includes(record.id) ? "bg-blue-50/50 border-l-4 border-orange-500" : ""}`}
+6669-                >
+6670-                  <div className="flex items-center gap-5">
+--
+6979:        {plans.map((plan, i) => (
+6980-          <motion.div
+6981-            key={plan.id}
+6982-            initial={{ opacity: 0, y: 20 }}
+6983-            animate={{ opacity: 1, y: 0 }}
+6984-            transition={{ delay: 0.1 * (i + 3) }}
+--
+7024:              {plan.features.map((feature, idx) => (
+7025-                <div key={idx} className="flex items-center gap-3">
+7026-                  <div className="w-5 h-5 bg-green-100 rounded-full flex items-center justify-center shrink-0">
+7027-                    <Check size={12} className="text-green-600" />
+7028-                  </div>
+7029-                  <span className="text-sm font-medium text-slate-600">
+--
+7192:       updatedWorkCenters = updatedWorkCenters.map(wc => wc.id === id ? { ...wc, name } : wc);
+7193-    } else {
+7194-       updatedWorkCenters.push({ id: Date.now().toString() + Math.random().toString(36).substring(7), name });
+7195-    }
+7196-    
+7197-    try {
+--
+7280:          .map(d => ({...d.data(), id: d.id}))
+7281-          .sort((a: any, b: any) => {
+7282-            const tA = a.createdAt?.seconds || 0;
+7283-            const tB = b.createdAt?.seconds || 0;
+7284-            return tB - tA;
+7285-          });
+--
+7306:        setWorkers(s.docs.map((d) => ({ ...d.data(), id: d.id }) as Worker));
+7307-        setLoading(false);
+7308-      },
+7309-      (error) => handleFirestoreError(error, "list", "workers"),
+7310-    );
+7311-
+--
+7319:        setReports(s.docs.map((d) => ({ ...d.data(), id: d.id }) as ClientReport));
+7320-      },
+7321-      (error) => handleFirestoreError(error, "list", "reports")
+7322-    );
+7323-
+7324-    return () => {
+--
+7348:              items: massiveEppItems.filter(i => i.name.trim() !== "").map(i => ({id: i.id, name: i.name, classification: "", category: "", type: "", deliveryType: "initial", usefulLifeGaranteeDays: 0, stockMin: 0, observation: ""}))
+7349-            };
+7350-            if (newRecord.items.length > 0) {
+7351-              const workerRef = doc(db, `clients/${selectedClientId}/workers`, worker.id);
+7352-              batch.update(workerRef, {
+7353-                eppRecords: [...currentEpp, newRecord],
+--
+7410:          affectedWorkers: affectedWorkers.map(w => ({ id: w.id, name: `${w.firstName} ${w.paternalLastName}`, rut: w.rut })),
+7411-          items: massiveAction === "epp" ? massiveEppItems.filter(i => i.name.trim() !== "") : undefined
+7412-        }
+7413-      }));
+7414-
+7415-      await batch.commit();
+--
+7509:        incidents: (formData.incidents || []).map((inc) =>
+7510-          inc.id === editingIncidentId
+7511-            ? {
+7512-                ...inc,
+7513-                date: newIncident.date || "",
+7514-                hour: newIncident.hour || "",
+--
+8057:            {filteredWorkers.map((w, wIdx) => (
+8058-              <div key={w.id || `wv-${wIdx}`} className="group p-4 lg:px-6 lg:py-4 hover:bg-slate-50 transition-colors flex flex-col lg:grid lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr_200px] lg:items-center gap-4 relative">
+8059-                
+8060-                {/* 1. Trabajador (Nombre y Correo) */}
+8061-                <div className="flex items-center gap-3">
+8062-                  <div className="w-10 h-10 shrink-0 bg-slate-50 rounded-xl flex items-center justify-center text-slate-800 font-black text-[10px] uppercase italic border border-slate-200">
+--
+8239:                {currentClientCtx?.workCenters?.map((wc, idx) => (
+8240-                  <option key={wc.id || `wc-${idx}`} value={wc.id || `wc-${idx}`}>{wc.name}</option>
+8241-                ))}
+8242-              </select>
+8243-
+8244-              {selectedMassiveWorkCenter && (
+--
+8258:                                setSelectedWorkerIds(workers.filter(w => w.workCenterId === selectedMassiveWorkCenter && w.status === 'active').map(w => w.id));
+8259-                              } else {
+8260-                                setSelectedWorkerIds([]);
+8261-                              }
+8262-                            }}
+8263-                          />
+--
+8266:                        {workers.filter(w => w.workCenterId === selectedMassiveWorkCenter && w.status === "active").map((w, wIdx) => (
+8267-                          <label key={w.id || `mwc-${wIdx}`} className="flex items-center gap-3 p-3 border border-slate-100 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors">
+8268-                            <input 
+8269-                              type="checkbox"
+8270-                              checked={selectedWorkerIds.includes(w.id)}
+8271-                              onChange={(e) => {
+--
+8329:                      {massiveEppItems.map((item, idx) => (
+8330-                        <div key={item.id} className="flex gap-3 items-center">
+8331-                          <input type="text" placeholder="Casco de seguridad..." value={item.name} onChange={(e) => {
+8332-                            const newItems = [...massiveEppItems];
+8333-                            newItems[idx].name = e.target.value;
+8334-                            setMassiveEppItems(newItems);
+--
+8723:                      {currentClientCtx?.workCenters?.map((wc, idx) => (
+8724-                        <option key={wc.id || `wc-${idx}`} value={wc.id || `wc-${idx}`}>{wc.name}</option>
+8725-                      ))}
+8726-                    </select>
+8727-                  </div>
+8728-                  <div className="space-y-1.5 md:col-span-1">
+--
+8968:                    {(formData.incidents || []).map((inc: any) => (
+8969-                      <div
+8970-                        key={inc.id}
+8971-                        className="bg-white border border-slate-200 p-3 rounded-xl flex justify-between items-center group shadow-sm hover:border-slate-400 transition-all"
+8972-                      >
+8973-                        <div className="flex items-center gap-4">
+--
+9104:                    {(formData.eppRecords || []).map((record: EppRecord) => (
+9105-                      <div
+9106-                        key={record.id}
+9107-                        className="bg-white border border-slate-200 p-4 rounded-xl flex justify-between items-center group shadow-sm hover:border-slate-400 transition-all"
+9108-                      >
+9109-                        <div className="flex items-center gap-4">
+--
+9188:                          .map((t: any) => (
+9189-                          <div key={t.id} className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex flex-col md:flex-row justify-between md:items-center gap-4 shadow-sm hover:border-blue-300 transition-all">
+9190-                            <div className="flex items-start gap-4">
+9191-                              <div className="w-10 h-10 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center shrink-0">
+9192-                                <Users size={18} />
+9193-                              </div>
+--
+9257:                        workerIRLs.filter((irl) => irl.workerId === editingWorker.id).map((irl) => (
+9258-                          <div key={irl.id} className="bg-slate-50 border border-slate-200 p-4 rounded-xl flex justify-between items-center shadow-sm hover:border-orange-300 transition-all">
+9259-                            <div className="flex items-center gap-4">
+9260-                              <div className="w-10 h-10 bg-orange-100 text-orange-600 rounded-xl flex items-center justify-center">
+9261-                                <FileText size={18} />
+9262-                              </div>
+--
+9526:                  {currentClientCtx?.workCenters?.map((wc, idx) => (
+9527-                    <div key={wc.id || `wc-${idx}`} className="flex items-center justify-between bg-white border border-slate-200 p-3 rounded-xl hover:border-orange-200 transition-colors">
+9528-                      {editingWcId === wc.id ? (
+9529-                        <input
+9530-                          type="text"
+9531-                          value={editingWcName}
+--
+9651:                    {currentClientCtx?.workCenters?.map((wc, idx) => (
+9652-                       <option key={wc.id || `wc-${idx}`} value={wc.id || `wc-${idx}`}>{wc.name}</option>
+9653-                    ))}
+9654-                  </select>
+9655-
+9656-                  <div className="relative">
+--
+9691:                                    setSelectedWorkerIdsToAssign(filtered.map(w => w.id));
+9692-                                  } else {
+9693-                                    setSelectedWorkerIdsToAssign([]);
+9694-                                  }
+9695-                                }}
+9696-                                className="w-5 h-5 rounded border-slate-300 text-orange-500 focus:ring-orange-500"
+--
+9700:                            {filtered.map((w, wIdx) => {
+9701-                              const isCurrentlyInThisWc = w.workCenterId === assignWcId;
+9702-                              return (
+9703-                                <label key={w.id || `awm-${wIdx}`} className={`flex items-center gap-4 p-4 border-b border-slate-100 last:border-0 cursor-pointer hover:bg-white transition-colors ${isCurrentlyInThisWc ? 'opacity-50 grayscale bg-slate-50/50' : 'bg-white'}`}>
+9704-                                  <input 
+9705-                                    type="checkbox"
+--
+9791:                  {reassigningWorkersTarget.map((w, wIdx) => (
+9792-                    <div key={w.id || `rwt-${wIdx}`} className="text-xs font-bold text-slate-700 py-1 border-b border-slate-100 last:border-0 truncate">
+9793-                      {w.firstName} {w.paternalLastName} ({w.rut}) 
+9794-                      <span className="text-orange-500 ml-1 block sm:inline font-black text-[10px] uppercase tracking-widest">
+9795-                        De: {currentClientCtx?.workCenters?.find(wc => wc.id === w.workCenterId)?.name || 'Desconocido'}
+9796-                      </span>
+--
+10218:                  {clients.map((c) => (
+10219-                    <option key={c.id} value={c.id}>
+10220-                      {c.name}
+10221-                    </option>
+10222-                  ))}
+10223-                </select>
+--
+10287:              }).map(([key, label]) => (
+10288-                <label
+10289-                  key={key}
+10290-                  className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 cursor-pointer hover:bg-slate-100/50 transition-colors"
+10291-                >
+10292-                  <input
+--
+10350:                {customItems.map((item) => (
+10351-                  <div
+10352-                    key={item.id}
+10353-                    className="flex items-center justify-between p-3 bg-slate-50 border border-slate-100 rounded-xl"
+10354-                  >
+10355-                    <div className="flex items-center gap-3">
+--
+10361:                            customItems.map((i) =>
+10362-                              i.id === item.id ? { ...i, value: !i.value } : i,
+10363-                            ),
+10364-                          )
+10365-                        }
+10366-                        className="w-4 h-4 rounded text-orange-500"
+--
+10586:                {extinguishers.map((e) => (
+10587-                  <div
+10588-                    key={e.id}
+10589-                    className="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-100 group"
+10590-                  >
+10591-                    <div className="flex flex-col">
+--
+10854:      items: DS44_REQUIREMENTS.map((r) => ({
+10855-        ...r,
+10856-        ...(responses[r.id] || { valoracion: "no_cumple" }),
+10857-      })),
+10858-      compliancePercentage,
+10859-      stats,
+--
+11002:              {clients.map((c) => (
+11003-                <option key={c.id} value={c.id}>
+11004-                  {c.name}
+11005-                </option>
+11006-              ))}
+11007-            </select>
+--
+11036:            {DS44_REQUIREMENTS.map((req) => (
+11037-              <tr
+11038-                key={req.id}
+11039-                className="hover:bg-slate-50/50 transition-colors"
+11040-              >
+11041-                <td className="px-4 py-6 text-center font-black text-slate-300 text-xs">
+--
+11277:        const dbRecords = s.docs.map((d) => {
+11278-          const data = d.data() as MiperRecord;
+11279-          if (!data.categoriaRiesgo && data.codigoRiesgo) {
+11280-            data.categoriaRiesgo =
+11281-              MIPER_LEGAL_RISKS.find((r) => r.codigo === data.codigoRiesgo)
+11282-                ?.categoria || "";
+--
+11307:            .map((d) => ({ ...d.data(), id: d.id }) as any)
+11308-            .filter((r) => r.type === "miper"),
+11309-        );
+11310-      },
+11311-      (error) =>
+11312-        handleFirestoreError(
+--
+11378:      prev.map((r) => {
+11379-        if (r.id !== id) return r;
+11380-        const copy = { ...r };
+11381-        const parts = fieldPath.split(".");
+11382-        if (parts.length === 2) {
+11383-          (copy as any)[parts[0]][parts[1]] = value;
+--
+11625:          records.map((record, idx) => {
+11626-            const isExpanded = expandedId === record.id;
+11627-
+11628-            return (
+11629-              <div
+11630-                key={record.id}
+--
+11857:                                    MIPER_LEGAL_RISKS.map((r) => r.categoria),
+11858-                                  ),
+11859:                                ).map((c) => (
+11860-                                  <option key={c} value={c}>
+11861-                                    {c}
+11862-                                  </option>
+11863-                                ))}
+11864-                              </select>
+--
+11896:                                    ).map((r) => r.familia),
+11897-                                  ),
+11898:                                ).map((f) => (
+11899-                                  <option key={f} value={f}>
+11900-                                    {f}
+11901-                                  </option>
+11902-                                ))}
+11903-                              </select>
+--
+11946:                                ).map((r) => (
+11947-                                  <option key={r.codigo} value={r.especifico}>
+11948-                                    {r.especifico}
+11949-                                  </option>
+11950-                                ))}
+11951-                              </select>
+--
+12226:                            ].map((item) => (
+12227-                              <div
+12228-                                key={item.path}
+12229-                                className="border border-slate-200 rounded-xl p-4 bg-slate-50"
+12230-                              >
+12231-                                <p className="text-xs font-bold text-slate-800 uppercase mb-3 text-center">
+--
+12517:            {historicalReports.map((report) => (
+12518-              <div
+12519-                key={report.id}
+12520-                className="px-8 py-5 flex items-center justify-between hover:bg-slate-50 transition-colors group"
+12521-              >
+12522-                <div className="flex items-center gap-4">
+--
+12638:          {(clients || []).map((c: any) => (
+12639-            <button
+12640-              key={c.id}
+12641-              onClick={() => onSelectClient(c.id)}
+12642-              className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-left font-bold text-slate-700 hover:border-orange-500 hover:bg-white transition-all flex items-center justify-between group"
+12643-            >
+--
+12777:      [catKey]: (template[catKey] || []).map((r: any) =>
+12778-        r.id === riskId ? { ...r, [field]: value } : r,
+12779-      ),
+12780-    });
+12781-  };
+12782-
+--
+12899:        {CATEGORIES.map((cat, idx) => (
+12900-          <section key={cat.key} className="max-w-5xl">
+12901-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 gap-4">
+12902-              <div>
+12903-                <h4 className="text-2xl font-black text-slate-900 uppercase tracking-tight">
+12904-                  {idx + 2}. {cat.label}
+--
+12943:                (template[cat.key] || []).map((risk: any, i: number) => (
+12944-                  <motion.div
+12945-                    key={risk.id}
+12946-                    initial={{ opacity: 0, y: 10 }}
+12947-                    animate={{ opacity: 1, y: 0 }}
+12948-                    className="bg-white border border-slate-200 p-6 rounded-3xl relative group shadow-sm hover:shadow-md transition-all"
+--
+13122:                miperRecords.map((mr: any) => (
+13123-                  <div
+13124-                    key={mr.id}
+13125-                    className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between gap-6 hover:border-indigo-300 transition-all group"
+13126-                  >
+13127-                    <div className="flex-1 min-w-0">
+--
+13192:        setTemplates(s.docs.map((d) => ({ ...d.data(), id: d.id })));
+13193-      },
+13194-      (error) =>
+13195-        handleFirestoreError(
+13196-          error,
+13197-          "list",
+--
+13311:          {filteredTemplates.map((t) => (
+13312-            <motion.div
+13313-              key={t.id}
+13314-              initial={{ opacity: 0, y: 10 }}
+13315-              animate={{ opacity: 1, y: 0 }}
+13316-              className="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col group relative overflow-hidden transition-all hover:shadow-md hover:border-orange-200"
+--
+13368:              {filteredTemplates.map((t) => (
+13369-                <tr
+13370-                  key={t.id}
+13371-                  className="hover:bg-slate-50 transition-colors group"
+13372-                >
+13373-                  <td className="p-4">
+--
+13513:        setTemplates(s.docs.map((d) => ({ ...d.data(), id: d.id })));
+13514-      },
+13515-      (error) =>
+13516-        handleFirestoreError(
+13517-          error,
+13518-          "list",
+--
+13526:        setWorkers(s.docs.map((d) => ({ ...d.data(), id: d.id })));
+13527-      },
+13528-      (error) =>
+13529-        handleFirestoreError(
+13530-          error,
+13531-          "list",
+--
+13540:          .map((d) => ({ ...d.data(), id: d.id }))
+13541-          .sort((a: any, b: any) => {
+13542-            const tA = a.createdAt?.seconds || 0;
+13543-            const tB = b.createdAt?.seconds || 0;
+13544-            return tB - tA;
+13545-          });
+--
+13740:                  {workers.map((w) => (
+13741-                    <option key={w.id} value={w.id}>
+13742-                      {w.rut} - {w.firstName} {w.paternalLastName}
+13743-                    </option>
+13744-                  ))}
+13745-                </select>
+--
+13759:                  {templates.map((t) => (
+13760-                    <option key={t.id} value={t.id}>
+13761-                      {t.cargo}
+13762-                    </option>
+13763-                  ))}
+13764-                </select>
+--
+13922:            {records.map((r) => (
+13923-              <div
+13924-                key={r.id}
+13925-                className="p-4 mx-2 my-2 bg-white border border-slate-200 rounded-2xl shadow-sm hover:border-orange-200 transition-all group"
+13926-              >
+13927-                <div className="flex justify-between items-start mb-3">
+--
+14110:        {clients.map((c: any) => (
+14111-          <button
+14112-            key={c.id}
+14113-            onClick={() => onSelect(c.id)}
+14114-            className="w-full p-4 bg-slate-50 border border-slate-200 rounded-xl text-left font-bold text-slate-700 hover:border-orange-500 hover:bg-white transition-all flex items-center justify-between group"
+14115-          >
+--
+14171:          setWorkers(s.docs.map((d) => ({ ...d.data(), id: d.id }) as Worker));
+14172-          setLoading(false);
+14173-        },
+14174-        (error) => handleFirestoreError(error, "list", "workers"),
+14175-      );
+14176-      
+--
+14196:    (w.incidents || []).map((i) => ({
+14197-      ...i,
+14198-      workerName: `${w.firstName} ${w.paternalLastName}`,
+14199-    })),
+14200-  );
+14201-
+--
+14283:    const data = Object.entries(monthlyData).map(([name, value]) => ({
+14284-      name,
+14285-      value,
+14286-    }));
+14287-
+14288-    // Linear Projection for next 6 months
+--
+14415:          {clients.map((c) => (
+14416-            <option key={c.id} value={c.id}>
+14417-              {c.name}
+14418-            </option>
+14419-          ))}
+14420-        </select>
+--
+14660:                  {allIncidents.map((i, idx) => (
+14661-                    <tr
+14662-                      key={idx}
+14663-                      className="hover:bg-slate-50/50 transition-colors group"
+14664-                    >
+14665-                      <td className="px-6 py-4">
+--
+14861:    responses: GRD_QUESTIONS.map((q) => ({
+14862-      qId: q.id,
+14863-      status: "N/A",
+14864-      observation: "",
+14865-    })),
+14866-    complianceScore: 0,
+--
+14881:          s.docs.map((d) => ({ ...d.data(), id: d.id }) as GRDInspection),
+14882-        );
+14883-      },
+14884-      (err) =>
+14885-        handleFirestoreError(
+14886-          err,
+--
+14907:      responses: GRD_QUESTIONS.map((q) => ({
+14908-        qId: q.id,
+14909-        status: "N/A",
+14910-        observation: "",
+14911-      })),
+14912-      complianceScore: 0,
+--
+15012:        responses: GRD_QUESTIONS.map((q) => ({
+15013-          qId: q.id,
+15014-          status: "N/A",
+15015-          observation: "",
+15016-        })),
+15017-        complianceScore: 0,
+--
+15062:            {clients.map((c: any) => (
+15063-              <button
+15064-                key={c.id}
+15065-                onClick={() => onSelectClient(c.id)}
+15066-                className="bg-slate-50 border border-slate-100 p-4 rounded-3xl hover:bg-white hover:border-orange-500 hover:shadow-xl transition-all text-left group"
+15067-              >
+--
+15140:            inspections.map((insp) => (
+15141-              <div
+15142-                key={insp.id}
+15143-                className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col"
+15144-              >
+15145-                <div className="flex justify-between items-start mb-6">
+--
+15225:            {GRD_QUESTIONS.map((q, idx) => (
+15226-              <div key={q.id} className="relative group">
+15227-                <div className="absolute -left-8 top-0 text-3xl font-black text-slate-100 group-hover:text-orange-100 transition-colors pointer-events-none font-mono">
+15228-                  {String(idx + 1).padStart(2, "0")}
+15229-                </div>
+15230-
+--
+15266:                      {(["SI", "NO", "N/A"] as const).map((opt) => {
+15267-                        const active =
+15268-                          currentInspection.responses?.find(
+15269-                            (r) => r.qId === q.id,
+15270-                          )?.status === opt;
+15271-                        return (
+--
+15345:      p.items.map((i) => ({
+15346-        qId: i.id,
+15347-        status: "NO" as const,
+15348-      })),
+15349-    ),
+15350-  });
+--
+15364:          s.docs.map((d) => ({ ...d.data(), id: d.id }) as MinsalAudit),
+15365-        );
+15366-      },
+15367-      (err) =>
+15368-        handleFirestoreError(
+15369-          err,
+--
+15385:        s.docs.map((d) => ({ ...d.data(), id: d.id }) as CustomMinsalProtocol),
+15386-      );
+15387-    });
+15388-    return () => unsub();
+15389-  }, [selectedClientId]);
+15390-
+--
+15406:        p.items.map((i) => ({
+15407-          qId: i.id,
+15408-          status: "NO" as const,
+15409-        })),
+15410-      ),
+15411-    });
+--
+15553:      const preparedItems = (editingCustom.items || []).map((it) => ({
+15554-        ...it,
+15555-        id: it.id || Math.random().toString(36).slice(2, 7),
+15556-      }));
+15557-
+15558-      await setDoc(
+--
+15613:            {clients.map((c: any) => (
+15614-              <button
+15615-                key={c.id}
+15616-                onClick={() => onSelectClient(c.id)}
+15617-                className="bg-slate-50 border border-slate-100 p-4 rounded-3xl hover:bg-white hover:border-blue-500 hover:shadow-xl transition-all text-left group"
+15618-              >
+--
+15697:            audits.map((audit) => (
+15698-              <div
+15699-                key={audit.id}
+15700-                className="bg-white p-6 rounded-[2.5rem] border border-slate-100 shadow-sm hover:shadow-xl transition-all group flex flex-col"
+15701-              >
+15702-                <div className="flex justify-between items-start mb-6">
+--
+15773:                  {MINSAL_PROTOCOLS.map((p) => (
+15774-                    <li
+15775-                      key={p.id}
+15776-                      className="flex items-center gap-3 text-xs font-bold text-slate-600"
+15777-                    >
+15778-                      <Shield size={14} className="text-blue-500" /> {p.title}
+--
+15784:              {customProtocols.map((p) => (
+15785-                <div
+15786-                  key={p.id}
+15787-                  className="bg-white p-6 rounded-[2rem] border-2 border-blue-50 shadow-sm hover:border-blue-200 transition-all group"
+15788-                >
+15789-                  <div className="flex justify-between items-start mb-4">
+--
+15817:                    {p.items?.slice(0, 2).map((it) => (
+15818-                      <p
+15819-                        key={it.id}
+15820-                        className="text-[10px] font-medium truncate"
+15821-                      >
+15822-                        • {it.label}
+--
+15844:                {mergedProtocols.map((p) => p.id.toUpperCase()).join(" • ")}
+15845-              </p>
+15846-            </div>
+15847-            <div className="flex gap-3">
+15848-              <button
+15849-                onClick={() => setActiveTab("list")}
+--
+15869:            {mergedProtocols.map((protocol) => {
+15870-              const protocolExtraFields = (
+15871-                currentAudit.extraFields || []
+15872-              ).filter((ef) => ef.protocolId === protocol.id);
+15873-              const allItems = [...protocol.items, ...protocolExtraFields];
+15874-
+--
+15931:                      allItems.map((item) => (
+15932-                        <div
+15933-                          key={item.id}
+15934-                          className="p-6 bg-slate-50 rounded-3xl border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-6 hover:bg-white hover:border-blue-200 transition-all group"
+15935-                        >
+15936-                          <h4 className="text-xs font-black text-slate-800 uppercase italic leading-relaxed flex-1">
+--
+15941:                            {(["NO", "EN_PROCESO", "FINALIZADO"] as const).map(
+15942-                              (opt) => {
+15943-                                const active =
+15944-                                  currentAudit.responses?.find(
+15945-                                    (r) => r.qId === item.id,
+15946-                                  )?.status === opt;
+--
+16054:                    {(editingCustom?.items || []).map((item, idx) => (
+16055-                      <div key={item.id} className="flex gap-2 items-center">
+16056-                        <span className="text-[10px] font-black text-slate-300 w-4">
+16057-                          {idx + 1}.
+16058-                        </span>
+16059-                        <input
+--
+16145:      setClientWorkers(snap.docs.map(d => d.data()));
+16146-    });
+16147-    return () => unsub();
+16148-  }, [selectedClientId]);
+16149-
+16150-  const filteredWorkers = React.useMemo(() => {
+--
+16416:                    {filteredWorkers.map(w => (
+16417-                      <div
+16418-                        key={w.id}
+16419-                        onClick={() => {
+16420-                          setSearchQuery(w.rut);
+16421-                          handleSearchWorker(w.rut);
+--
+16491:                {recentDiseases.map((dis) => (
+16492-                  <button
+16493-                    key={dis.id}
+16494-                    onClick={() => selectDisease(dis)}
+16495-                    className="w-full text-left p-6 rounded-2xl border-2 border-slate-100 hover:border-teal-500 hover:bg-teal-50 transition-all group"
+16496-                  >
+--
+16678:                ].map((t) => (
+16679-                  <label
+16680-                    key={t}
+16681-                    className="flex items-center gap-2 cursor-pointer"
+16682-                  >
+16683-                    <input
+--
+17130:                  ].map((c) => (
+17131-                    <label
+17132-                      key={c}
+17133-                      className={`p-4 rounded-2xl flex items-center gap-2 cursor-pointer border-2 transition-all ${formData.reporter.quality === c ? "bg-slate-900 border-slate-900 shadow-xl" : "bg-slate-50 border-slate-100"}`}
+17134-                    >
+17135-                      <input
+--
+18403:          const loadedClients = snapshot.docs.map((d) => ({
+18404-            id: d.id,
+18405-            ...d.data(),
+18406-          }));
+18407-          // Sort manually to avoid index requirement
+18408-          setClients(
+--
+18441:            {clients.map((client) => (
+18442-              <button
+18443-                key={client.id}
+18444-                onClick={() => setLocalSelectedClientId(client.id)}
+18445-                className="bg-white p-6 rounded-3xl border-2 border-slate-100 hover:border-blue-500 transition-all text-left shadow-sm group"
+18446-              >
+--
+18608:      setClientWorkers(snap.docs.map(d => d.data()));
+18609-    });
+18610-    return () => unsub();
+18611-  }, [selectedClientId]);
+18612-
+18613-  const filteredWorkers = React.useMemo(() => {
+--
+18891:                    {filteredWorkers.map(w => (
+18892-                      <div
+18893-                        key={w.id}
+18894-                        onClick={() => {
+18895-                          setSearchQuery(w.rut);
+18896-                          handleSearchWorker(w.rut);
+--
+18966:                {recentAccidents.map((acc) => (
+18967-                  <button
+18968-                    key={acc.id}
+18969-                    onClick={() => selectAccident(acc)}
+18970-                    className="w-full text-left p-6 rounded-2xl border-2 border-slate-100 hover:border-orange-500 hover:bg-orange-50 transition-all group"
+18971-                  >
+--
+19170:                {["Privada", "Pública"].map((p) => (
+19171-                  <label
+19172-                    key={p}
+19173-                    className="flex items-center gap-2 cursor-pointer"
+19174-                  >
+19175-                    <input
+--
+19201:                ].map((t) => (
+19202-                  <label
+19203-                    key={t}
+19204-                    className="flex items-center gap-2 cursor-pointer"
+19205-                  >
+19206-                    <input
+--
+19470:                  {["D", "M", "A"].map((u) => (
+19471-                    <label
+19472-                      key={u}
+19473-                      className="flex items-center gap-1 cursor-pointer"
+19474-                    >
+19475-                      <input
+--
+19820:                    {["SI", "NO"].map((opt) => (
+19821-                      <label
+19822-                        key={opt}
+19823-                        className="flex items-center gap-2 cursor-pointer"
+19824-                      >
+19825-                        <input
+--
+19857:                  {["Trabajo", "Trayecto"].map((t) => (
+19858-                    <label
+19859-                      key={t}
+19860-                      className="flex items-center gap-4 cursor-pointer group"
+19861-                    >
+19862-                      <input
+--
+19893:                      ].map((dt) => (
+19894-                        <label
+19895-                          key={dt}
+19896-                          className="flex items-center gap-2 cursor-pointer bg-white p-3 rounded-xl border border-slate-100 hover:bg-orange-50 transition-colors"
+19897-                        >
+19898-                          <input
+--
+19929:                        ].map((mp) => (
+19930-                          <label
+19931-                            key={mp}
+19932-                            className="flex items-center gap-1 cursor-pointer"
+19933-                          >
+19934-                            <input
+--
+20007:                ].map((c) => (
+20008-                  <label
+20009-                    key={c}
+20010-                    className={`p-3 rounded-xl flex items-center gap-2 cursor-pointer border-2 transition-all ${formData.reporter.quality === c ? "bg-slate-900 border-slate-900" : "bg-slate-50 border-slate-100 hover:bg-slate-100"}`}
+20011-                  >
+20012-                    <input

@@ -1,0 +1,130 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isVerified() { return isSignedIn() && request.auth.token.email_verified == true; }
+    
+    function userExists(userId) { return exists(/databases/$(database)/documents/users/$(userId)); }
+    function getProfile(userId) { return get(/databases/$(database)/documents/users/$(userId)).data; }
+    
+    function isCollaboratorOf(ownerId) {
+      return isSignedIn() && userExists(request.auth.uid) && getProfile(request.auth.uid).get('corporateAdminId', '') == ownerId;
+    }
+
+    function isClientOwner(clientId) {
+      return isSignedIn() && exists(/databases/$(database)/documents/clients/$(clientId)) && 
+             get(/databases/$(database)/documents/clients/$(clientId)).data.ownerId == request.auth.uid;
+    }
+
+    // --- Connection Test ---
+    match /test/connection {
+      allow get: if true; // Publicly readable for connection testing
+    }
+
+    // --- Users ---
+    match /users/{userId} {
+      function isValidUser(data) {
+        return data.email is string && data.email.size() > 0 && 
+               data.planType in ['free', 'pro', 'full', 'corporate'] &&
+               data.createdAt == request.time;
+      }
+
+      allow get: if isSignedIn() && (isOwner(userId) || isCollaboratorOf(userId) || (userExists(userId) && getProfile(userId).get('corporateAdminId', '') == request.auth.uid));
+      allow create: if isSignedIn() && isOwner(userId) && isValidUser(incoming());
+      allow update: if isSignedIn() && isOwner(userId) && (
+        (incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'professionalTitle', 'professionalLicense', 'signatureURL']) && isVerified())
+        ||
+        (incoming().diff(existing()).affectedKeys().hasOnly(['planType', 'corporateAdminId']))
+      );
+    }
+
+    // --- Clients ---
+    match /clients/{clientId} {
+      function isValidClient(data) {
+        return data.name is string && data.name.size() > 0 && data.name.size() <= 256 &&
+               data.ownerId == request.auth.uid &&
+               data.createdAt == request.time;
+      }
+
+      allow list: if isSignedIn() && (resource.data.ownerId == request.auth.uid || isCollaboratorOf(resource.data.ownerId));
+      allow get: if isSignedIn() && isValidId(clientId) && (isOwner(existing().ownerId) || isCollaboratorOf(existing().ownerId));
+      allow create: if isSignedIn() && isValidId(clientId) && isValidClient(incoming());
+      
+      allow update: if isSignedIn() && isOwner(existing().ownerId) && (
+        (incoming().diff(existing()).affectedKeys().hasOnly(['name', 'rut', 'industry', 'address', 'deleted']) && (incoming().name is string && incoming().name.size() <= 256))
+      );
+      
+      allow delete: if isSignedIn() && isOwner(existing().ownerId);
+
+      // --- Subcollections ---
+      
+      // Inspections
+      match /inspections/{id} {
+        function isValidInspection(data) {
+          return data.clientId == clientId && data.authorId == request.auth.uid &&
+                 data.employeeCount is number && data.actualToilets is number;
+        }
+        allow list, get: if isSignedIn() && isValidId(id) && (isClientOwner(clientId) || isCollaboratorOf(get(/databases/$(database)/documents/clients/$(clientId)).data.ownerId));
+        allow create: if isSignedIn() && isValidId(id) && isValidInspection(incoming());
+        allow update: if isSignedIn() && isClientOwner(clientId) && (
+          incoming().diff(existing()).affectedKeys().hasOnly(['status', 'employeeCount', 'actualToilets', 'actualShowers', 'extinguishers'])
+        );
+        allow delete: if isSignedIn() && isClientOwner(clientId);
+      }
+
+      // Accidents
+      match /accidents/{id} {
+        function isValidAccident(data) {
+          return data.clientId == clientId && data.authorId == request.auth.uid && 
+                 data.workerName is string && data.workerName.size() > 0 && data.workerName.size() <= 256 &&
+                 data.daysLost is number && data.daysLost >= 0;
+        }
+        allow list, get: if isSignedIn() && isValidId(id) && (isClientOwner(clientId) || isCollaboratorOf(get(/databases/$(database)/documents/clients/$(clientId)).data.ownerId));
+        allow create: if isSignedIn() && isValidId(id) && isValidAccident(incoming());
+        allow update: if isSignedIn() && isClientOwner(clientId) && (
+          incoming().diff(existing()).affectedKeys().hasOnly(['workerName', 'date', 'daysLost', 'invalidityDegree', 'type'])
+        );
+        allow delete: if isSignedIn() && isClientOwner(clientId);
+      }
+
+      // IPER
+      match /iper_matrices/{id} {
+        function isValidIPER(data) {
+          return data.clientId == clientId && data.authorId == request.auth.uid && 
+                 data.createdAt == request.time && data.risks is list;
+        }
+        allow list, get: if isSignedIn() && isValidId(id) && (isClientOwner(clientId) || isCollaboratorOf(get(/databases/$(database)/documents/clients/$(clientId)).data.ownerId));
+        allow create: if isSignedIn() && isValidId(id) && isValidIPER(incoming());
+        allow update: if isSignedIn() && isClientOwner(clientId) && (
+          incoming().diff(existing()).affectedKeys().hasOnly(['risks'])
+        );
+        allow delete: if isSignedIn() && isClientOwner(clientId);
+      }
+
+      // Gantt
+      match /gantt_tasks/{id} {
+        function isValidGantt(data) {
+          return data.clientId == clientId && data.title is string && data.title.size() <= 256;
+        }
+        allow list, get: if isSignedIn() && isValidId(id) && (isClientOwner(clientId) || isCollaboratorOf(get(/databases/$(database)/documents/clients/$(clientId)).data.ownerId));
+        allow create, update, delete: if isSignedIn() && (isClientOwner(clientId) || isCollaboratorOf(get(/databases/$(database)/documents/clients/$(clientId)).data.ownerId)) && isValidGantt(incoming());
+      }
+    }
+
+    // --- Usage ---
+    match /usage/{usageId} {
+      allow get: if isSignedIn() && usageId.startsWith(request.auth.uid);
+      allow create, update: if isSignedIn() && usageId.startsWith(request.auth.uid) && incoming().userId == request.auth.uid;
+    }
+  }
+}

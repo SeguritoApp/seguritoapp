@@ -1,0 +1,1301 @@
+984-                )}
+985-              </label>
+986:              <input
+987-                type="text"
+988-                value={searchQuery}
+--
+1037-                Centro (Opcional)
+1038-              </label>
+1039:              <input
+1040-                type="text"
+1041-                value={centro}
+--
+1049-                Observaciones
+1050-              </label>
+1051:              <input
+1052-                type="text"
+1053-                value={observaciones}
+--
+1079-                  <tr key={index} className="hover:bg-slate-50/50">
+1080-                    <td className="px-4 py-2">
+1081:                      <input
+1082-                        type="text"
+1083-                        value={item.name}
+--
+1090-                    </td>
+1091-                    <td className="px-4 py-2">
+1092:                      <input
+1093-                        type="date"
+1094-                        min="1950-01-01"
+--
+1106-                    </td>
+1107-                    <td className="px-4 py-2">
+1108:                      <input
+1109-                        type="date"
+1110-                        min="1950-01-01"
+--
+1118-                    </td>
+1119-                    <td className="px-4 py-2">
+1120:                      <input
+1121-                        type="date"
+1122-                        min="1950-01-01"
+--
+1134-                    </td>
+1135-                    <td className="px-4 py-2">
+1136:                      <input
+1137-                        type="date"
+1138-                        min="1950-01-01"
+--
+1522-                      size={18}
+1523-                    />
+1524:                    <input
+1525-                      type="text"
+1526-                      className="w-full bg-slate-50 pl-12 pr-4 py-4 rounded-2xl text-sm font-black border border-slate-200 focus:border-red-500 outline-none transition-all uppercase"
+--
+1586-                          Fecha Evento
+1587-                        </label>
+1588:                        <input
+1589-                          type="date"
+1590-                          min="1950-01-01"
+--
+1604-                          Hora Suceso
+1605-                        </label>
+1606:                        <input
+1607-                          type="time"
+1608-                          value={incidentData.time}
+--
+1641-                        Dirección / Ubicación Exacta del Suceso
+1642-                      </label>
+1643:                      <input
+1644-                        value={incidentData.location}
+1645-                        onChange={(e) =>
+--
+1658-                        Título / Diagnóstico Preliminar
+1659-                      </label>
+1660:                      <input
+1661-                        value={incidentData.title}
+1662-                        onChange={(e) =>
+--
+1699-                          Medio de Prueba
+1700-                        </label>
+1701:                        <input
+1702-                          value={incidentData.proof}
+1703-                          onChange={(e) =>
+--
+1715-                    <div className="flex items-center gap-6 pt-2">
+1716-                      <label className="flex items-center gap-3 cursor-pointer group">
+1717:                        <input
+1718-                          type="checkbox"
+1719-                          checked={incidentData.isFatal}
+--
+1734-                          Incap. %
+1735-                        </label>
+1736:                        <input
+1737-                          type="number"
+1738-                          value={incidentData.invalidityDegree}
+--
+1752-                          Días Perdidos
+1753-                        </label>
+1754:                        <input
+1755-                          type="number"
+1756-                          value={incidentData.daysLost}
+--
+3945-              size={22}
+3946-            />
+3947:            <input
+3948-              type="text"
+3949-              placeholder="Buscar por Empresa o RUT..."
+--
+4030-                        Razón Social
+4031-                      </label>
+4032:                      <input
+4033-                        type="text"
+4034-                        placeholder="Ej: Minera del Norte S.A."
+--
+4045-                        RUT Empresa
+4046-                      </label>
+4047:                      <input
+4048-                        type="text"
+4049-                        placeholder="Ej: 77.123.456-K"
+--
+4059-                        Rubro / Actividad
+4060-                      </label>
+4061:                      <input
+4062-                        type="text"
+4063-                        placeholder="Ej: Construcción / Minería"
+--
+4076-                        Dirección Casa Matriz
+4077-                      </label>
+4078:                      <input
+4079-                        type="text"
+4080-                        placeholder="Ciudad, Región"
+--
+4103-                        Nombre Completo
+4104-                      </label>
+4105:                      <input
+4106-                        type="text"
+4107-                        placeholder="Nombre del Delegado"
+--
+4120-                        RUT Delegado
+4121-                      </label>
+4122:                      <input
+4123-                        type="text"
+4124-                        placeholder="RUT"
+--
+4137-                        Correo Electrónico
+4138-                      </label>
+4139:                      <input
+4140-                        type="email"
+4141-                        placeholder="email@contacto.cl"
+--
+4154-                        Teléfono
+4155-                      </label>
+4156:                      <input
+4157-                        type="tel"
+4158-                        placeholder="+56 9 ..."
+--
+4184-
+4185-              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-start mb-4">
+4186:                <input
+4187-                  type="text"
+4188-                  placeholder="Ej: Sucursal Santiago..."
+--
+5095-                    Descripción de la Actividad
+5096-                  </label>
+5097:                  <input
+5098-                    value={formData.title}
+5099-                    onChange={(e) =>
+--
+5109-                      Fecha de Inicio
+5110-                    </label>
+5111:                    <input
+5112-                      type="date"
+5113-                      min="1950-01-01"
+--
+5124-                      Fecha de Término
+5125-                    </label>
+5126:                    <input
+5127-                      type="date"
+5128-                      min="1950-01-01"
+--
+5162-                      Días Anticipación Alerta
+5163-                    </label>
+5164:                    <input
+5165-                      type="number"
+5166-                      min="0"
+--
+5726-                  Nombre Profesional Completo
+5727-                </label>
+5728:                <input
+5729-                  type="text"
+5730-                  value={formData.displayName}
+--
+5741-                  Especialidad / Cargo
+5742-                </label>
+5743:                <input
+5744-                  type="text"
+5745-                  placeholder="Ej: Ingeniero en Prevención de Riesgos"
+--
+5761-                    SEREMI / SNS-Minsal (OBLIGATORIO)
+5762-                  </label>
+5763:                  <input
+5764-                    type="text"
+5765-                    placeholder="Ingrese su registro legal..."
+--
+5844-                {signatureMode === "upload" ? (
+5845-                  <div className="space-y-4">
+5846:                    <input
+5847-                      type="file"
+5848-                      ref={fileInputRef}
+--
+7241-                      size={14}
+7242-                    />
+7243:                    <input
+7244-                      type="text"
+7245-                      placeholder="Buscar..."
+--
+7315-                        <div className="space-y-3">
+7316-                          <label className="flex items-center gap-3 cursor-pointer group">
+7317:                            <input
+7318-                              type="checkbox"
+7319-                              checked={compendiumOptions.onePagePerReport}
+--
+7338-                          </label>
+7339-                          <label className="flex items-center gap-3 cursor-pointer group">
+7340:                            <input
+7341-                              type="checkbox"
+7342-                              checked={compendiumOptions.comparativeSummary}
+--
+9747-            {importing ? "Importando..." : "Importar Desde Excel/CSV"}
+9748-          </button>
+9749:          <input
+9750-            type="file"
+9751-            ref={fileInputRef}
+--
+9806-                size={18}
+9807-              />
+9808:              <input
+9809-                type="text"
+9810-                placeholder="Encuentra inteligentemente a trabajadores por Rut o Nombre"
+--
+10138-                      <>
+10139-                        <label className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg cursor-pointer hover:bg-slate-100 mb-2">
+10140:                          <input
+10141-                            type="checkbox"
+10142-                            checked={
+--
+10182-                              className="flex items-center gap-3 p-3 border border-slate-100 rounded-lg cursor-pointer hover:bg-slate-50 transition-colors"
+10183-                            >
+10184:                              <input
+10185-                                type="checkbox"
+10186-                                checked={selectedWorkerIds.includes(w.id)}
+--
+10244-                        Fecha Entrega
+10245-                      </label>
+10246:                      <input
+10247-                        type="date"
+10248-                        value={massiveDate}
+--
+10255-                        Observaciones Generales
+10256-                      </label>
+10257:                      <input
+10258-                        type="text"
+10259-                        value={massiveObservations}
+--
+10293-                      {massiveEppItems.map((item, idx) => (
+10294-                        <div key={item.id} className="flex gap-3 items-center">
+10295:                          <input
+10296-                            type="text"
+10297-                            placeholder="Casco de seguridad..."
+--
+10360-                        Instructor / Relator
+10361-                      </label>
+10362:                      <input
+10363-                        type="text"
+10364-                        value={massiveInstructor}
+--
+10372-                        Tema Tratado / Materia
+10373-                      </label>
+10374:                      <input
+10375-                        type="text"
+10376-                        value={massiveTopic}
+--
+10384-                        Fecha
+10385-                      </label>
+10386:                      <input
+10387-                        type="date"
+10388-                        value={massiveDate}
+--
+10395-                        Hora Inicio
+10396-                      </label>
+10397:                      <input
+10398-                        type="time"
+10399-                        value={massiveStartTime}
+--
+10406-                        Hora Término
+10407-                      </label>
+10408:                      <input
+10409-                        type="time"
+10410-                        value={massiveEndTime}
+--
+10417-                        Duración Total
+10418-                      </label>
+10419:                      <input
+10420-                        type="text"
+10421-                        value={massiveDuration}
+--
+10429-                        Nombre Solicitante Capacitación
+10430-                      </label>
+10431:                      <input
+10432-                        type="text"
+10433-                        value={massiveRequester}
+--
+10440-                        Material de Apoyo
+10441-                      </label>
+10442:                      <input
+10443-                        type="text"
+10444-                        value={massiveMaterials}
+--
+10451-                        Lugar (Especificar)
+10452-                      </label>
+10453:                      <input
+10454-                        type="text"
+10455-                        value={massiveLocation}
+--
+10463-                      Observaciones
+10464-                    </label>
+10465:                    <input
+10466-                      type="text"
+10467-                      value={massiveObservations}
+--
+10667-                          Nombres
+10668-                        </label>
+10669:                        <input
+10670-                          value={formData.firstName || ""}
+10671-                          onChange={(e) =>
+--
+10683-                          Apellido Paterno
+10684-                        </label>
+10685:                        <input
+10686-                          value={formData.paternalLastName || ""}
+10687-                          onChange={(e) =>
+--
+10698-                          Apellido Materno
+10699-                        </label>
+10700:                        <input
+10701-                          value={formData.maternalLastName || ""}
+10702-                          onChange={(e) =>
+--
+10714-                          RUT / Identificador
+10715-                        </label>
+10716:                        <input
+10717-                          value={formData.rut || ""}
+10718-                          onChange={(e) =>
+--
+10727-                          Fecha Nacimiento
+10728-                        </label>
+10729:                        <input
+10730-                          type="date"
+10731-                          min="1950-01-01"
+--
+10745-                          Fecha Incorporación
+10746-                        </label>
+10747:                        <input
+10748-                          type="date"
+10749-                          min="1950-01-01"
+--
+10764-                          Email de Contacto
+10765-                        </label>
+10766:                        <input
+10767-                          value={formData.email || ""}
+10768-                          onChange={(e) =>
+--
+10777-                          Teléfono
+10778-                        </label>
+10779:                        <input
+10780-                          value={formData.phone || ""}
+10781-                          onChange={(e) =>
+--
+10791-                          Dirección Residencial
+10792-                        </label>
+10793:                        <input
+10794-                          value={formData.address || ""}
+10795-                          onChange={(e) =>
+--
+10806-                          Cargo / Puesto
+10807-                        </label>
+10808:                        <input
+10809-                          value={formData.position || ""}
+10810-                          onChange={(e) =>
+--
+10894-                            Fecha
+10895-                          </label>
+10896:                          <input
+10897-                            type="date"
+10898-                            min="1950-01-01"
+--
+10913-                          </label>
+10914-                          <div className="flex gap-1">
+10915:                            <input
+10916-                              type="time"
+10917-                              value={newIncident.hour || ""}
+--
+10962-                            Días Perdidos
+10963-                          </label>
+10964:                          <input
+10965-                            type="number"
+10966-                            value={newIncident.daysLost ?? 0}
+--
+10982-                            Título / Evento
+10983-                          </label>
+10984:                          <input
+10985-                            type="text"
+10986-                            value={newIncident.title || ""}
+--
+10999-                            Descripción del Siniestro
+11000-                          </label>
+11001:                          <input
+11002-                            type="text"
+11003-                            value={newIncident.description || ""}
+--
+11016-                            Inv. %
+11017-                          </label>
+11018:                          <input
+11019-                            type="number"
+11020-                            value={newIncident.invalidityDegree ?? 0}
+--
+11032-                        <div className="lg:col-span-1 flex flex-col justify-end min-h-[34px] pb-2">
+11033-                          <label className="flex items-center justify-center gap-2 px-1 cursor-pointer">
+11034:                            <input
+11035-                              type="checkbox"
+11036-                              checked={newIncident.isFatal || false}
+--
+11502-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 w-full sm:flex-1">
+11503-                  <label className="flex items-center gap-2 cursor-pointer group whitespace-nowrap">
+11504:                    <input
+11505-                      type="checkbox"
+11506-                      checked={formData.status === "active"}
+--
+11520-                    </span>
+11521-                  </label>
+11522:                  <input
+11523-                    type="text"
+11524-                    value={formData.statusDescription || ""}
+--
+11871-              <div className="p-8">
+11872-                <div className="mb-6 flex gap-2">
+11873:                  <input
+11874-                    type="text"
+11875-                    placeholder="Ej: Sucursal Santiago, Obra Norte"
+--
+11906-                    >
+11907-                      {editingWcId === wc.id ? (
+11908:                        <input
+11909-                          type="text"
+11910-                          value={editingWcName}
+--
+12054-                      size={16}
+12055-                    />
+12056:                    <input
+12057-                      type="text"
+12058-                      placeholder="Buscar trabajador por nombre o RUT..."
+--
+12096-                          <div className="flex flex-col overflow-y-auto">
+12097-                            <label className="flex items-center gap-4 p-4 border-b border-slate-200 cursor-pointer hover:bg-slate-100 sticky top-0 bg-slate-100 z-10 transition-colors">
+12098:                              <input
+12099-                                type="checkbox"
+12100-                                checked={
+--
+12126-                                  className={`flex items-center gap-4 p-4 border-b border-slate-100 last:border-0 cursor-pointer hover:bg-white transition-colors ${isCurrentlyInThisWc ? "opacity-50 grayscale bg-slate-50/50" : "bg-white"}`}
+12127-                                >
+12128:                                  <input
+12129-                                    type="checkbox"
+12130-                                    disabled={isCurrentlyInThisWc}
+--
+12993-                        <Search size={16} className="text-slate-400" />
+12994-                      </div>
+12995:                      <input
+12996-                        type="text"
+12997-                        placeholder="Encuentra inteligentemente a cliente por RUT o Nombre..."
+--
+13054-                  Dotación Máxima por Turno
+13055-                </label>
+13056:                <input
+13057-                  type="number"
+13058-                  value={workers}
+--
+13065-                  Superficie Total (m²)
+13066-                </label>
+13067:                <input
+13068-                  type="number"
+13069-                  value={surfaceArea}
+--
+13075-              </div>
+13076-              <label className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 cursor-pointer md:col-span-2">
+13077:                <input
+13078-                  type="checkbox"
+13079-                  checked={isTemporarySite}
+--
+13117-                  className="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100 cursor-pointer hover:bg-slate-100/50 transition-colors"
+13118-                >
+13119:                  <input
+13120-                    type="checkbox"
+13121-                    checked={(checklist as any)[key]}
+--
+13148-            <div className="p-6 space-y-4">
+13149-              <div className="flex gap-2">
+13150:                <input
+13151-                  type="text"
+13152-                  placeholder="Ej: Estado de andamios, Orden de bodega específica..."
+--
+13181-                  >
+13182-                    <div className="flex items-center gap-3">
+13183:                      <input
+13184-                        type="checkbox"
+13185-                        checked={item.value}
+--
+13242-                  Excusados (WC)
+13243-                </label>
+13244:                <input
+13245-                  type="number"
+13246-                  value={actualToilets}
+--
+13255-                  Lavatorios
+13256-                </label>
+13257:                <input
+13258-                  type="number"
+13259-                  value={actualWashbasins}
+--
+13268-                  Duchas
+13269-                </label>
+13270:                <input
+13271-                  type="number"
+13272-                  value={actualShowers}
+--
+13289-            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+13290-              <label className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100 cursor-pointer">
+13291:                <input
+13292-                  type="checkbox"
+13293-                  checked={hasPotableWater}
+--
+13300-              </label>
+13301-              <label className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100 cursor-pointer">
+13302:                <input
+13303-                  type="checkbox"
+13304-                  checked={hasDressingRoom}
+--
+13311-              </label>
+13312-              <label className="flex items-center gap-3 p-4 bg-slate-50 rounded-xl border border-slate-100 cursor-pointer md:col-span-2">
+13313:                <input
+13314-                  type="checkbox"
+13315-                  checked={hasDiningRoom}
+--
+13337-                </label>
+13338-                <div className="flex gap-4 items-center">
+13339:                  <input
+13340-                    type="number"
+13341-                    value={lightingMeasured}
+--
+13372-                      ID/N° Serie
+13373-                    </label>
+13374:                    <input
+13375-                      type="text"
+13376-                      className="bg-slate-50 p-2.5 rounded-xl text-xs border border-slate-200 outline-none focus:border-orange-500 font-bold"
+--
+13395-                      Ubicación
+13396-                    </label>
+13397:                    <input
+13398-                      type="text"
+13399-                      className="bg-slate-50 p-2.5 rounded-xl text-xs border border-slate-200 outline-none focus:border-orange-500 font-bold"
+--
+13408-                      F. Fabricación
+13409-                    </label>
+13410:                    <input
+13411-                      type="month"
+13412-                      className="bg-slate-50 p-2.5 rounded-xl text-xs border border-slate-200 outline-none font-bold"
+--
+13418-                      F. Recarga
+13419-                    </label>
+13420:                    <input
+13421-                      type="month"
+13422-                      className="bg-slate-50 p-2.5 rounded-xl text-xs border border-slate-200 outline-none font-bold"
+--
+13428-                      Vto. P. Hidrostática
+13429-                    </label>
+13430:                    <input
+13431-                      type="month"
+13432-                      className="bg-slate-50 p-2.5 rounded-xl text-xs border border-slate-200 outline-none font-bold"
+--
+13438-                      Vto. Equipo
+13439-                    </label>
+13440:                    <input
+13441-                      type="month"
+13442-                      className="bg-slate-50 p-2.5 rounded-xl text-xs border border-slate-200 outline-none font-bold text-orange-600"
+--
+14060-                    <Search size={16} className="text-slate-400" />
+14061-                  </div>
+14062:                  <input
+14063-                    type="text"
+14064-                    placeholder="Encuentra inteligentemente a cliente por RUT o Nombre..."
+--
+14194-              </div>
+14195-              <div className="col-span-2 lg:px-4 lg:py-6 space-y-3">
+14196:                <input
+14197-                  type="text"
+14198-                  placeholder="Evidencia / Documento..."
+--
+14213-              </div>
+14214-              <div className="col-span-2 lg:px-4 lg:py-6 space-y-3 flex flex-row lg:flex-col gap-3 lg:gap-2">
+14215:                <input
+14216-                  type="text"
+14217-                  placeholder="Resp..."
+--
+14222-                  className="w-full bg-slate-50 border border-slate-200 p-3 lg:p-2 rounded-xl text-[11px] lg:text-[10px] font-medium outline-none focus:border-orange-400 focus:ring-2 focus:ring-orange-500/10 transition-all placeholder:text-slate-400"
+14223-                />
+14224:                <input
+14225-                  type="date"
+14226-                  min="1950-01-01"
+--
+14893-                    <Search size={16} className="text-slate-400" />
+14894-                  </div>
+14895:                  <input
+14896-                    type="text"
+14897-                    placeholder="Encuentra inteligentemente a cliente por RUT o Nombre..."
+--
+14952-              Aprobado por
+14953-            </label>
+14954:            <input
+14955-              value={aprobadoPor}
+14956-              onChange={(e) => setAprobadoPor(e.target.value)}
+--
+15034-                                Proceso
+15035-                              </label>
+15036:                              <input
+15037-                                value={record.proceso}
+15038-                                onChange={(e) =>
+--
+15050-                                Puestos de trabajo
+15051-                              </label>
+15052:                              <input
+15053-                                value={record.puestosTrabajo}
+15054-                                onChange={(e) =>
+--
+15066-                                Tareas (Nombre)
+15067-                              </label>
+15068:                              <input
+15069-                                value={record.tareaNombre}
+15070-                                onChange={(e) =>
+--
+15101-                                Lugar Específico
+15102-                              </label>
+15103:                              <input
+15104-                                value={record.lugarEspecifico}
+15105-                                onChange={(e) =>
+--
+15117-                                N° Trabajadores
+15118-                              </label>
+15119:                              <input
+15120-                                type="number"
+15121-                                value={record.numPersonas}
+--
+15134-                                Identidad Sexogenérica
+15135-                              </label>
+15136:                              <input
+15137-                                value={record.identidadSexo}
+15138-                                onChange={(e) =>
+--
+15150-                                Observaciones
+15151-                              </label>
+15152:                              <input
+15153-                                value={record.observaciones}
+15154-                                onChange={(e) =>
+--
+15323-                                Medida de Control Actual
+15324-                              </label>
+15325:                              <input
+15326-                                value={record.medidaControlActual}
+15327-                                onChange={(e) =>
+--
+15372-                                  </td>
+15373-                                  <td className="p-3">
+15374:                                    <input
+15375-                                      type="number"
+15376-                                      min="1"
+--
+15387-                                  </td>
+15388-                                  <td className="p-3">
+15389:                                    <input
+15390-                                      type="number"
+15391-                                      min="1"
+--
+15416-                                  </td>
+15417-                                  <td className="p-3">
+15418:                                    <input
+15419-                                      type="number"
+15420-                                      min="1"
+--
+15431-                                  </td>
+15432-                                  <td className="p-3">
+15433:                                    <input
+15434-                                      type="number"
+15435-                                      min="1"
+--
+15460-                                  </td>
+15461-                                  <td className="p-3">
+15462:                                    <input
+15463-                                      type="number"
+15464-                                      min="1"
+--
+15475-                                  </td>
+15476-                                  <td className="p-3">
+15477:                                    <input
+15478-                                      type="number"
+15479-                                      min="1"
+--
+15504-                                  </td>
+15505-                                  <td className="p-3">
+15506:                                    <input
+15507-                                      type="number"
+15508-                                      min="1"
+--
+15519-                                  </td>
+15520-                                  <td className="p-3">
+15521:                                    <input
+15522-                                      type="number"
+15523-                                      min="1"
+--
+15582-                                      Prob.
+15583-                                    </label>
+15584:                                    <input
+15585-                                      type="number"
+15586-                                      value={item.data.prob}
+--
+15599-                                      Cons.
+15600-                                    </label>
+15601:                                    <input
+15602-                                      type="number"
+15603-                                      value={item.data.cons}
+--
+15640-                                Requisito Legal Aplicable
+15641-                              </label>
+15642:                              <input
+15643-                                value={record.requisitoLegal}
+15644-                                onChange={(e) =>
+--
+15656-                                Medidas de Control Eliminación (Jerarquía)
+15657-                              </label>
+15658:                              <input
+15659-                                value={record.jerarquiaControl}
+15660-                                onChange={(e) =>
+--
+15679-                                    Persona o Jerarquía Responsable
+15680-                                  </label>
+15681:                                  <input
+15682-                                    value={record.respEjecucion}
+15683-                                    onChange={(e) =>
+--
+15695-                                    Plazo de Ejecución
+15696-                                  </label>
+15697:                                  <input
+15698-                                    type="date"
+15699-                                    min="1950-01-01"
+--
+15719-                                    Persona/Jerarquía Seguimiento
+15720-                                  </label>
+15721:                                  <input
+15722-                                    value={record.respSeguimiento}
+15723-                                    onChange={(e) =>
+--
+15735-                                    Plazo Seguimiento
+15736-                                  </label>
+15737:                                  <input
+15738-                                    type="date"
+15739-                                    min="1950-01-01"
+--
+15769-                                  Probabilidad
+15770-                                </label>
+15771:                                <input
+15772-                                  type="number"
+15773-                                  min="1"
+--
+15787-                                  Consecuencia
+15788-                                </label>
+15789:                                <input
+15790-                                  type="number"
+15791-                                  min="1"
+--
+16268-            Nombre del Cargo
+16269-          </label>
+16270:          <input
+16271-            value={template.cargo || ""}
+16272-            onChange={(e) =>
+--
+16437-                      </div>
+16438-                      <div className="flex-1 w-full">
+16439:                        <input
+16440-                          placeholder="Peligro/Riesgo (Ej: Caída a mismo nivel)"
+16441-                          value={risk.riesgo || ""}
+--
+16751-              size={18}
+16752-            />
+16753:            <input
+16754-              type="text"
+16755-              placeholder="Buscar cargo en cientos de plantillas..."
+--
+17237-                    size={16}
+17238-                  />
+17239:                  <input
+17240-                    type="text"
+17241-                    value={searchQuery}
+--
+17327-                  Emp. Contratista/Sub (Opcional)
+17328-                </label>
+17329:                <input
+17330-                  type="text"
+17331-                  value={form.empresaContratista}
+--
+17341-                  Fecha de Capacitación
+17342-                </label>
+17343:                <input
+17344-                  type="date"
+17345-                  min="1950-01-01"
+--
+17355-                    Inicio
+17356-                  </label>
+17357:                  <input
+17358-                    type="time"
+17359-                    value={form.horarioDesde}
+--
+17368-                    Fin
+17369-                  </label>
+17370:                  <input
+17371-                    type="time"
+17372-                    value={form.horarioHasta}
+--
+17389-                  Procedimientos Entregados
+17390-                </label>
+17391:                <input
+17392-                  value={form.procedimientosAdjuntos}
+17393-                  onChange={(e) =>
+--
+17402-                  HDS (Hojas de datos seguridad)
+17403-                </label>
+17404:                <input
+17405-                  value={form.hojasSeguridadAdjuntas}
+17406-                  onChange={(e) =>
+--
+17415-                  Otros Documentos
+17416-                </label>
+17417:                <input
+17418-                  value={form.otrosAdjuntos}
+17419-                  onChange={(e) =>
+--
+17693-              size={20}
+17694-            />
+17695:            <input
+17696-              type="text"
+17697-              placeholder="Buscar por nombre o RUT..."
+--
+18153-                  <Search size={16} className="text-slate-400" />
+18154-                </div>
+18155:                <input
+18156-                  type="text"
+18157-                  placeholder="Encuentra inteligentemente a cliente por RUT o Nombre..."
+--
+18213-              Promedio Trabajadores (Mensual)
+18214-            </label>
+18215:            <input
+18216-              type="number"
+18217-              min="1"
+--
+18226-              Horas Hombre Trabajadas (Periodo)
+18227-            </label>
+18228:            <input
+18229-              type="number"
+18230-              min="1"
+--
+19674-              size={18}
+19675-            />
+19676:            <input
+19677-              type="text"
+19678-              placeholder="Buscar por fecha (ej: 12 de marzo)..."
+--
+19902-                    {addingFieldTo === protocol.id && (
+19903-                      <div className="p-4 bg-blue-50 rounded-3xl border-2 border-blue-100 flex flex-col gap-3 animate-in slide-in-from-top duration-300">
+19904:                        <input
+19905-                          autoFocus
+19906-                          type="text"
+--
+19989-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+19990-                            <div className="space-y-3">
+19991:                              <input
+19992-                                type="text"
+19993-                                placeholder="Evidencia / Documento..."
+--
+20024-                            </div>
+20025-                            <div className="space-y-3 flex flex-col gap-3">
+20026:                              <input
+20027-                                type="text"
+20028-                                placeholder="Responsable..."
+--
+20041-                                className="w-full bg-white border border-slate-200 p-3 rounded-xl text-[10px] font-medium outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-500/10 transition-all placeholder:text-slate-400"
+20042-                              />
+20043:                              <input
+20044-                                type="date"
+20045-                                min="1950-01-01"
+--
+20118-                    Título del Protocolo
+20119-                  </label>
+20120:                  <input
+20121-                    type="text"
+20122-                    value={editingCustom?.title}
+--
+20158-                          {idx + 1}.
+20159-                        </span>
+20160:                        <input
+20161-                          type="text"
+20162-                          value={item.label}
+--
+20565-                size={18}
+20566-              />
+20567:              <input
+20568-                type="text"
+20569-                placeholder="RUT O NOMBRE COMPLETO..."
+--
+20721-                Razón Social
+20722-              </label>
+20723:              <input
+20724-                type="text"
+20725-                value={formData.employer.name}
+--
+20737-                RUT
+20738-              </label>
+20739:              <input
+20740-                type="text"
+20741-                value={formData.employer.rut}
+--
+20753-                Comuna
+20754-              </label>
+20755:              <input
+20756-                type="text"
+20757-                value={formData.employer.commune}
+--
+20769-                Dirección
+20770-              </label>
+20771:              <input
+20772-                type="text"
+20773-                value={formData.employer.address}
+--
+20790-                    Hombres
+20791-                  </span>
+20792:                  <input
+20793-                    type="number"
+20794-                    value={formData.employer.employeesH}
+--
+20809-                    Mujeres
+20810-                  </span>
+20811:                  <input
+20812-                    type="number"
+20813-                    value={formData.employer.employeesM}
+--
+20863-                    className="flex items-center gap-2 cursor-pointer"
+20864-                  >
+20865:                    <input
+20866-                      type="radio"
+20867-                      checked={formData.employer.type === t}
+--
+20880-                ))}
+20881-              </div>
+20882:              <input
+20883-                type="text"
+20884-                placeholder="ACTIVIDAD ECONÓMICA..."
+--
+20917-                Nombre Completo
+20918-              </label>
+20919:              <input
+20920-                type="text"
+20921-                value={formData.worker.name}
+--
+20933-                RUN
+20934-              </label>
+20935:              <input
+20936-                type="text"
+20937-                value={formData.worker.rut}
+--
+20949-                Fecha de Nacimiento
+20950-              </label>
+20951:              <input
+20952-                type="date"
+20953-                min="1950-01-01"
+--
+20985-                Teléfono
+20986-              </label>
+20987:              <input
+20988-                type="text"
+20989-                value={formData.worker.phone}
+--
+21001-                Dirección
+21002-              </label>
+21003:              <input
+21004-                type="text"
+21005-                value={formData.worker.address}
+--
+21017-                Comuna
+21018-              </label>
+21019:              <input
+21020-                type="text"
+21021-                value={formData.worker.commune}
+--
+21033-                Nacionalidad
+21034-              </label>
+21035:              <input
+21036-                type="text"
+21037-                value={formData.worker.nationality}
+--
+21073-                Profesión u Oficio
+21074-              </label>
+21075:              <input
+21076-                type="text"
+21077-                value={formData.worker.profession}
+--
+21132-                </label>
+21133-                <div className="flex gap-2">
+21134:                  <input
+21135-                    type="number"
+21136-                    value={formData.disease.timeWithSymptoms}
+--
+21167-                  <span className="text-red-500">*</span>
+21168-                </label>
+21169:                <input
+21170-                  type="text"
+21171-                  value={formData.disease.affectedBodyPart}
+--
+21227-                </label>
+21228-                <div className="flex gap-2">
+21229:                  <input
+21230-                    type="number"
+21231-                    value={formData.disease.exposureTime}
+--
+21264-                  Lugar de trabajo donde se presentaron las molestias:
+21265-                </label>
+21266:                <input
+21267-                  type="text"
+21268-                  value={formData.disease.workPlaceStarted}
+--
+21315-                      className={`p-4 rounded-2xl flex items-center gap-2 cursor-pointer border-2 transition-all ${formData.reporter.quality === c ? "bg-slate-900 border-slate-900 shadow-xl" : "bg-slate-50 border-slate-100"}`}
+21316-                    >
+21317:                      <input
+21318-                        type="radio"
+21319-                        checked={formData.reporter.quality === c}
+--
+21339-                  Nombre Completo
+21340-                </label>
+21341:                <input
+21342-                  type="text"
+21343-                  value={formData.reporter.name}
+--
+21355-                  RUT
+21356-                </label>
+21357:                <input
+21358-                  type="text"
+21359-                  value={formData.reporter.rut}
+--
+21371-                  Teléfono
+21372-                </label>
+21373:                <input
+21374-                  type="text"
+21375-                  value={formData.reporter.phone}
+--
+23080-                size={18}
+23081-              />
+23082:              <input
+23083-                type="text"
+23084-                placeholder="RUT O NOMBRE COMPLETO..."
+--
+23238-                Nombre o Razón Social
+23239-              </label>
+23240:              <input
+23241-                type="text"
+23242-                value={formData.employer.name}
+--
+23254-                RUT
+23255-              </label>
+23256:              <input
+23257-                type="text"
+23258-                value={formData.employer.rut}
+--
+23271-                Comuna
+23272-              </label>
+23273:              <input
+23274-                type="text"
+23275-                value={formData.employer.commune}
+--
+23287-                Dirección (Calle, N°, Depto., Población, Villa, Ciudad)
+23288-              </label>
+23289:              <input
+23290-                type="text"
+23291-                value={formData.employer.address}
+--
+23325-                Actividad Económica
+23326-              </label>
+23327:              <input
+23328-                type="text"
+23329-                value={formData.employer.activity}
+--
+23349-                    Hombres
+23350-                  </span>
+23351:                  <input
+23352-                    type="number"
+23353-                    value={formData.employer.employeesH}
+--
+23368-                    Mujeres
+23369-                  </span>
+23370:                  <input
+23371-                    type="number"
+23372-                    value={formData.employer.employeesM}
+--
+23395-                    className="flex items-center gap-2 cursor-pointer"
+23396-                  >
+23397:                    <input
+23398-                      type="radio"
+23399-                      checked={formData.employer.property === p}
+--
+23426-                    className="flex items-center gap-2 cursor-pointer"
+23427-                  >
+23428:                    <input
+23429-                      type="radio"
+23430-                      checked={formData.employer.type === t}
+--
+23449-                    Si es contratista, señale activ. empresa principal:
+23450-                  </label>
+23451:                  <input
+23452-                    type="text"
+23453-                    value={formData.employer.mainCompanyActivity}
+--
+23489-                Nombres - Apellidos
+23490-              </label>
+23491:              <input
+23492-                type="text"
+23493-                value={formData.worker.name}
+--
+23505-                RUN
+23506-              </label>
+23507:              <input
+23508-                type="text"
+23509-                value={formData.worker.rut}
+--
+23521-                Edad
+23522-              </label>
+23523:              <input
+23524-                type="number"
+23525-                value={formData.worker.age}
+--
+23537-                Fecha de Nacimiento
+23538-              </label>
+23539:              <input
+23540-                type="date"
+23541-                min="1950-01-01"
+--
+23573-                Teléfono
+23574-              </label>
+23575:              <input
+23576-                type="text"
+23577-                value={formData.worker.phone}
+--
+23589-                Dirección Particular
+23590-              </label>
+23591:              <input
+23592-                type="text"
+23593-                value={formData.worker.address}
+--
+23605-                Comuna
+23606-              </label>
+23607:              <input
+23608-                type="text"
+23609-                value={formData.worker.commune}
+--
+23645-                Nacionalidad
+23646-              </label>
+23647:              <input
+23648-                type="text"
+23649-                value={formData.worker.nationality}
+--
+23661-                Profesión u Oficio
+23662-              </label>
+23663:              <input
+23664-                type="text"
+23665-                value={formData.worker.profession}
+--
+23678-              </label>
+23679-              <div className="flex gap-4 items-center">
+23680:                <input
+23681-                  type="number"
+23682-                  value={formData.worker.seniority}
+--
+23695-                      className="flex items-center gap-1 cursor-pointer"
+23696-                    >
+23697:                      <input
+23698-                        type="radio"
+23699-                        checked={
+--
+23809-                FECHA ACCIDENTE *
+23810-              </label>
+23811:              <input
+23812-                type="date"
+23813-                min="1950-01-01"
+--
+23828-              </label>
+23829-              <div className="flex gap-2">
+23830:                <input
+23831-                  type="time"
+23832-                  value={formData.accident.hour}
+--
+23865-                  </label>
+23866-                  <div className="flex gap-2">
+23867:                    <input
+23868-                      type="time"
+23869-                      value={formData.accident.entryHour}
+--
+23902-                  </label>
+23903-                  <div className="flex gap-2">
+23904:                    <input
+23905-                      type="time"
+23906-                      value={formData.accident.exitHour}
+--
+23941-                DIRECCIÓN DEL ACCIDENTE *
+23942-              </label>
+23943:              <input
+23944-                type="text"
+23945-                value={formData.accident.address}
+--
+23959-                accidente:
+23960-              </label>
+23961:              <input
+23962-                type="text"
+23963-                value={formData.accident.activityAtMoment}
+--
+23979-                Señale el lugar del accidente (Ej: taller, oficina, bodega):
+23980-              </label>
+23981:              <input
+23982-                type="text"
+23983-                value={formData.accident.placeDetails}
+--
+24021-                  Señale cuál era su trabajo habitual:
+24022-                </label>
+24023:                <input
+24024-                  type="text"
+24025-                  value={formData.accident.habitualWork}
+--
+24045-                        className="flex items-center gap-2 cursor-pointer"
+24046-                      >
+24047:                        <input
+24048-                          type="radio"
+24049-                          checked={
+--
+24082-                      className="flex items-center gap-4 cursor-pointer group"
+24083-                    >
+24084:                      <input
+24085-                        type="radio"
+24086-                        checked={formData.accident.type === t}
+--
+24118-                          className="flex items-center gap-2 cursor-pointer bg-white p-3 rounded-xl border border-slate-100 hover:bg-orange-50 transition-colors"
+24119-                        >
+24120:                          <input
+24121-                            type="radio"
+24122-                            checked={formData.accident.trayectoType === dt}
+--
+24154-                            className="flex items-center gap-1 cursor-pointer"
+24155-                          >
+24156:                            <input
+24157-                              type="radio"
+24158-                              checked={formData.accident.medioPrueba === mp}
+--
+24175-                      </div>
+24176-                      {formData.accident.medioPrueba !== "Ninguno" && (
+24177:                        <input
+24178-                          type="text"
+24179-                          placeholder="Especifique medio de prueba..."
+--
+24232-                    className={`p-3 rounded-xl flex items-center gap-2 cursor-pointer border-2 transition-all ${formData.reporter.quality === c ? "bg-slate-900 border-slate-900" : "bg-slate-50 border-slate-100 hover:bg-slate-100"}`}
+24233-                  >
+24234:                    <input
+24235-                      type="radio"
+24236-                      name="cal_den"
+--
+24258-                Nombre Completo Denunciante
+24259-              </label>
+24260:              <input
+24261-                type="text"
+24262-                value={formData.reporter.name}
+--
+24274-                RUT Denunciante
+24275-              </label>
+24276:              <input
+24277-                type="text"
+24278-                value={formData.reporter.rut}
+--
+24290-                Teléfono Denunciante
+24291-              </label>
+24292:              <input
+24293-                type="text"
+24294-                value={formData.reporter.phone}

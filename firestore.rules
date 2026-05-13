@@ -1,0 +1,293 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 0. Global Safety Net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // --- Helpers ---
+    function isSignedIn() { return request.auth != null; }
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
+    function isVerified() { return isSignedIn() && request.auth.token.email_verified == true; }
+    function isSuperAdmin() { return isSignedIn() && request.auth.token.email == 'estudiofjc@gmail.com'; }
+    function isAdmin() { return isSuperAdmin() || (isSignedIn() && exists(/databases/$(database)/documents/admins/$(request.auth.uid))); }
+    
+    function userExists(userId) { return exists(/databases/$(database)/documents/users/$(userId)); }
+    function getProfile(userId) { return get(/databases/$(database)/documents/users/$(userId)).data; }
+    
+    function isCollaboratorOf(ownerId) {
+      return isSignedIn() && 
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.get('corporateAdminId', '') == ownerId &&
+             ownerId != '';
+    }
+
+    function isCorporateAdminOf(collaboratorId) {
+      return isSignedIn() && 
+             get(/databases/$(database)/documents/users/$(collaboratorId)).data.get('corporateAdminId', '') == request.auth.uid &&
+             request.auth.uid != '';
+    }
+
+    function isTrial(userId) {
+      let userDoc = getProfile(userId);
+      return userDoc.get('subscriptionType', 'free') == 'free' &&
+             userDoc.createdAt != null &&
+             request.time.toMillis() - userDoc.createdAt.toMillis() <= 1728000000;
+    }
+
+    function isPremiumFeatureEnabled(ownerId) {
+      return isTrial(ownerId) || getProfile(ownerId).get('subscriptionType', 'free') in ['avanzado', 'profesional', 'corporativo'];
+    }
+
+    function canAccessClient(clientId) {
+      return isSignedIn() && isValidId(clientId) && (
+        isAdmin() ||
+        get(/databases/$(database)/documents/clients/$(clientId)).data.ownerId == request.auth.uid ||
+        isCollaboratorOf(get(/databases/$(database)/documents/clients/$(clientId)).data.ownerId) ||
+        isCorporateAdminOf(get(/databases/$(database)/documents/clients/$(clientId)).data.ownerId)
+      );
+    }
+
+    // --- Connection Test ---
+    match /test/connection {
+      allow get: if true; // Publicly readable for connection testing
+    }
+
+    // --- Users ---
+    match /users/{userId} {
+      function isValidUser(data) {
+        return data.email == request.auth.token.email && 
+               data.get('subscriptionType', 'free') == 'free' &&
+               data.get('pdfCount', 0) == 0 &&
+               data.createdAt == request.time;
+      }
+
+      allow list: if isSuperAdmin();
+      allow get: if isSignedIn() && (isOwner(userId) || isCollaboratorOf(userId) || (userExists(userId) && getProfile(userId).get('corporateAdminId', '') == request.auth.uid) || isSuperAdmin());
+      allow create: if isSignedIn() && isOwner(userId) && isValidUser(incoming());
+      allow update: if (
+        (isSignedIn() && isOwner(userId) && (
+          // Action: Profile Update
+          (incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'professionalTitle', 'professionalLicense', 'signatureURL', 'updatedAt']) && isVerified())
+          ||
+          // Action: PDF Tracking increment (Allowed Counters)
+          (incoming().diff(existing()).affectedKeys().hasAny(['pdfCount', 'dailyPdfs', 'lastPdfDate', 'updatedAt', 'lastReset']) &&
+           !incoming().diff(existing()).affectedKeys().hasAny(['subscriptionType', 'isPremium', 'corporateAdminId', 'email', 'createdAt', 'flowCustomerId', 'pendingSubscriptionPlanId', 'flowPlanId']))
+        ))
+        ||
+        (isSuperAdmin() && incoming().diff(existing()).affectedKeys().hasOnly(['subscriptionType', 'isPremium']))
+      );
+    }
+
+    // --- Clients ---
+    match /clients/{clientId} {
+      function isValidClient(data) {
+        return data.name is string && data.name.size() > 0 && data.name.size() <= 256 &&
+               (data.ownerId == request.auth.uid || isCollaboratorOf(data.ownerId)) &&
+               data.createdAt == request.time;
+      }
+
+      allow list: if isAdmin() || (isSignedIn() && (resource.data.ownerId == request.auth.uid || isCollaboratorOf(resource.data.ownerId) || isCorporateAdminOf(resource.data.ownerId)));
+      allow get: if isSignedIn() && isValidId(clientId) && (isAdmin() || isOwner(existing().ownerId) || isCollaboratorOf(existing().ownerId) || isCorporateAdminOf(existing().ownerId));
+      allow create: if isSignedIn() && isValidId(clientId) && isValidClient(incoming());
+      
+      allow update: if isSignedIn() && (isOwner(existing().ownerId) || isCollaboratorOf(existing().ownerId) || isCorporateAdminOf(existing().ownerId)) && (
+        (incoming().diff(existing()).affectedKeys().hasOnly(['name', 'rut', 'industry', 'address', 'status', 'delegateName', 'delegateRut', 'delegateEmail', 'delegatePhone', 'deleted', 'updatedAt', 'metadata', 'workCenters']) && (incoming().name is string && incoming().name.size() <= 256))
+      );
+      
+      allow delete: if isSignedIn() && (isOwner(existing().ownerId) || isCollaboratorOf(existing().ownerId) || isCorporateAdminOf(existing().ownerId));
+
+      // --- Subcollections ---
+      
+      // Workers
+      match /workers/{id} {
+        function isValidWorker(data) {
+          return data.clientId == clientId && 
+                 (data.get('firstName', '') is string) && 
+                 (data.get('status', 'active') in ['active', 'inactive']) &&
+                 (resource == null ? data.createdAt == request.time : !('createdAt' in incoming().diff(existing()).affectedKeys())) &&
+                 data.updatedAt == request.time;
+        }
+        allow list, get: if canAccessClient(clientId);
+        allow create, update: if canAccessClient(clientId) && isValidWorker(incoming());
+        allow delete: if canAccessClient(clientId);
+      }
+      
+      // Inspections
+      match /inspections/{id} {
+        function isValidInspection(data) {
+          return data.clientId == clientId && data.authorId == request.auth.uid &&
+                 data.employeeCount is number && data.actualToilets is number;
+        }
+        allow list, get: if canAccessClient(clientId);
+        allow create: if canAccessClient(clientId) && isValidId(id) && isValidInspection(incoming());
+        allow update: if canAccessClient(clientId) && (
+          incoming().diff(existing()).affectedKeys().hasOnly(['status', 'employeeCount', 'actualToilets', 'actualShowers', 'extinguishers'])
+        );
+        allow delete: if canAccessClient(clientId);
+      }
+
+      // Inspections 44
+      match /inspections_44/{id} {
+        allow list, get: if canAccessClient(clientId);
+        allow create, update: if canAccessClient(clientId);
+        allow delete: if canAccessClient(clientId);
+      }
+
+      // Accidents
+      match /accidents/{id} {
+        function isValidAccident(data) {
+          return data.clientId == clientId && data.authorId == request.auth.uid && 
+                 data.workerName is string && data.workerName.size() > 0 && data.workerName.size() <= 256 &&
+                 data.daysLost is number && data.daysLost >= 0;
+        }
+        allow list, get: if canAccessClient(clientId);
+        allow create: if canAccessClient(clientId) && isValidId(id) && isValidAccident(incoming());
+        allow update: if canAccessClient(clientId) && (
+          incoming().diff(existing()).affectedKeys().hasOnly(['workerName', 'date', 'daysLost', 'invalidityDegree', 'type'])
+        );
+        allow delete: if canAccessClient(clientId);
+      }
+
+      // IPER
+      match /iper_matrices/{id} {
+        function isValidIPER(data) {
+          return data.clientId == clientId && data.authorId == request.auth.uid && 
+                 data.createdAt == request.time && data.risks is list;
+        }
+        allow list, get: if canAccessClient(clientId);
+        allow create: if canAccessClient(clientId) && isValidId(id) && isValidIPER(incoming());
+        allow update: if canAccessClient(clientId) && (
+          incoming().diff(existing()).affectedKeys().hasOnly(['risks'])
+        );
+        allow delete: if canAccessClient(clientId);
+      }
+
+      // PROCEDURES
+      match /procedures/{id} {
+        allow list, get: if canAccessClient(clientId);
+        allow create, update: if canAccessClient(clientId);
+        allow delete: if canAccessClient(clientId);
+      }
+
+      // MIPER
+      match /miper/{id} {
+        allow list, get: if canAccessClient(clientId);
+        allow create, update: if canAccessClient(clientId);
+        allow delete: if canAccessClient(clientId);
+      }
+      
+      // MIPER RISKS
+      match /miper_risks/{id} {
+        allow list, get: if canAccessClient(clientId);
+        allow create, update: if canAccessClient(clientId);
+        allow delete: if canAccessClient(clientId);
+      }
+
+      // IRL (Obligación de Informar)
+      match /irl_templates/{id} {
+        function isValidIRLTemplate(data) {
+          return data.clientId == clientId && data.cargo is string && data.cargo.size() > 0 &&
+                 data.riesgosGenerales is list;
+        }
+        allow list, get: if canAccessClient(clientId);
+        allow create: if canAccessClient(clientId) && isValidId(id) && isValidIRLTemplate(incoming());
+        allow update: if canAccessClient(clientId) && isValidIRLTemplate(incoming()) && (
+          incoming().diff(existing()).affectedKeys().hasOnly(['cargo', 'espacioTrabajo', 'condicionesAmbientales', 'ordenAseo', 'herramientas', 'riesgosGenerales', 'riesgosMaquinas', 'riesgosQuimicos', 'riesgosBiologicos', 'riesgosPsicosociales', 'riesgosEspecificos', 'riesgosEmergencias', 'updatedAt'])
+        );
+        allow delete: if canAccessClient(clientId);
+      }
+
+      match /irl_records/{id} {
+        function isValidIRLRecord(data) {
+          return data.clientId == clientId && data.workerId is string && data.workerName is string;
+        }
+        allow list, get: if canAccessClient(clientId);
+        allow create: if canAccessClient(clientId) && isValidId(id) && isValidIRLRecord(incoming());
+        allow update, delete: if canAccessClient(clientId);
+      }
+
+      // Gantt
+      match /gantt_tasks/{id} {
+        function isValidGantt(data) {
+          return data.clientId == clientId && data.title is string && data.title.size() <= 256;
+        }
+        allow list, get: if canAccessClient(clientId);
+        allow create, update: if canAccessClient(clientId) && isValidGantt(incoming());
+        allow delete: if canAccessClient(clientId);
+      }
+
+      // Reports
+      match /reports/{id} {
+        allow read, create, update: if canAccessClient(clientId);
+        allow delete: if canAccessClient(clientId);
+      }
+
+      // Parity Committees
+      match /parity_committees/{id} {
+        allow list, get: if canAccessClient(clientId);
+        allow create, update, delete: if canAccessClient(clientId);
+      }
+
+      // Investigations
+      match /investigations/{id} {
+        allow list, get: if canAccessClient(clientId);
+        allow create, update, delete: if canAccessClient(clientId);
+      }
+
+      function getClientOwnerPath(cid) {
+        return get(/databases/$(database)/documents/clients/$(cid)).data.ownerId;
+      }
+
+      // DIEP Records
+      match /diep_records/{id} {
+        allow list, get: if canAccessClient(clientId);
+        allow create, update: if canAccessClient(clientId) && isPremiumFeatureEnabled(getClientOwnerPath(clientId));
+        allow delete: if canAccessClient(clientId);
+      }
+
+      // DIAT Records
+      match /diat_records/{id} {
+        allow list, get: if canAccessClient(clientId);
+        allow create, update: if canAccessClient(clientId) && isPremiumFeatureEnabled(getClientOwnerPath(clientId));
+        allow delete: if canAccessClient(clientId);
+      }
+
+      // GRD
+      match /grd_inspections/{id} {
+        function isValidGRD(data) {
+          return data.clientId == clientId && data.authorId == request.auth.uid &&
+                 data.complianceScore is number && data.responses is list;
+        }
+        allow list, get: if canAccessClient(clientId);
+        allow create: if canAccessClient(clientId) && isValidId(id) && isValidGRD(incoming());
+        allow update: if canAccessClient(clientId) && (
+          incoming().diff(existing()).affectedKeys().hasOnly(['responses', 'complianceScore', 'date', 'updatedAt'])
+        );
+        allow delete: if canAccessClient(clientId);
+      }
+
+      // MINSAL
+      match /minsal_audits/{id} {
+        allow list, get: if canAccessClient(clientId);
+        allow create, update: if canAccessClient(clientId) && isPremiumFeatureEnabled(getClientOwnerPath(clientId));
+        allow delete: if canAccessClient(clientId);
+      }
+
+      match /custom_minsal_protocols/{id} {
+        allow list, get: if canAccessClient(clientId);
+        allow create, update: if canAccessClient(clientId) && isPremiumFeatureEnabled(getClientOwnerPath(clientId));
+        allow delete: if canAccessClient(clientId);
+      }
+    }
+
+    // --- Usage ---
+    match /usage/{usageId} {
+      allow get: if isSignedIn() && usageId.startsWith(request.auth.uid);
+      allow create, update: if isSignedIn() && usageId.startsWith(request.auth.uid) && incoming().userId == request.auth.uid;
+    }
+  }
+}

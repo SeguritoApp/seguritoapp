@@ -1,0 +1,149 @@
+482:  if (Array.isArray(obj)) return obj.map(cleanForFirestore);
+589:        auth.currentUser?.providerData?.map((provider) => ({
+738:        DEFAULT_EPP_ITEMS.map((name) => ({
+760:      setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Worker));
+870:                {clients.map((c) => (
+888:                {workers.map((w) => (
+937:                {items.map((item, index) => (
+1126:        setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Worker));
+1349:                  {clients.map((c) => (
+1385:                        {workers.map((w) => (
+1813:          snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Client),
+2964:        const clientsList = s.docs.map(
+2986:        setClientsInfo(clientsList.map((c) => ({ id: c.id, name: c.name })));
+3016:          .map((d) => {
+3165:                alerts.slice(0, 10).map((alert) => (
+3255:          s.docs.map((d) => ({ id: d.id, ...d.data() }) as Client),
+3286:            {recentClients.map((client) => (
+3815:                  {newClient.workCenters.map((wc, idx) => (
+3894:          sortedLetters.map((letter) => (
+3908:                {groupedClients[letter].map((client) => (
+4051:      const data = snapshot.docs.map(
+4394:                {scaleCols.map((col, idx) => (
+4429:                  {new Array(scaleCols.length).fill(0).map((_, idx) => (
+4448:                tasks.map((task) => {
+4509:                        {spans.map((isSpanned, mIdx) => (
+5367:          s.docs.map((d) => ({ id: d.id, ...d.data() }) as ClientReport),
+5379:      setDiepRecords(s.docs.map((d) => ({ id: d.id, ...d.data() }))),
+5388:      setDiatRecords(s.docs.map((d) => ({ id: d.id, ...d.data() }))),
+5401:          s.docs.map((d) => ({ id: d.id, ...d.data() }) as Inspection),
+5416:        setAccidents(s.docs.map((d) => ({ id: d.id, ...d.data() }) as any));
+5428:        setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Worker));
+5441:        setTasks(s.docs.map((d) => ({ id: d.id, ...d.data() }) as GanttTask));
+5470:        setIrlRecords(s.docs.map((d) => d.data()));
+5484:          s.docs.map((d) => ({ id: d.id, ...d.data() }) as GRDInspection),
+5499:          s.docs.map((d) => ({ id: d.id, ...d.data() }) as MinsalAudit),
+5522:    (w.incidents || []).map((i) => ({
+5691:    ...reports.map((r) => ({ ...r, libraryType: "report" as const })),
+5692:    ...diepRecords.map((d) => ({
+5701:    ...diatRecords.map((d) => ({
+5710:    ...irlRecords.map((irl) => ({
+5768:  const workersWithIRL = new Set(irlRecords.map((r) => r.workerId)).size;
+5854:          accidents: filteredAccidents.map((a) => ({
+6305:              {Array.from({ length: Math.min(inspections.length, 5) }).map(
+6386:              {Array.from({ length: Math.min(minsalAudits.length, 5) }).map(
+6665:              {filteredRecords.map((record) => (
+6979:        {plans.map((plan, i) => (
+7024:              {plan.features.map((feature, idx) => (
+7192:       updatedWorkCenters = updatedWorkCenters.map(wc => wc.id === id ? { ...wc, name } : wc);
+7280:          .map(d => ({id: d.id, ...d.data()}))
+7306:        setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Worker));
+7319:        setReports(s.docs.map((d) => ({ id: d.id, ...d.data() }) as ClientReport));
+7348:              items: massiveEppItems.filter(i => i.name.trim() !== "").map(i => ({id: i.id, name: i.name, classification: "", category: "", type: "", deliveryType: "initial", usefulLifeGaranteeDays: 0, stockMin: 0, observation: ""}))
+7410:          affectedWorkers: affectedWorkers.map(w => ({ id: w.id, name: `${w.firstName} ${w.paternalLastName}`, rut: w.rut })),
+7509:        incidents: (formData.incidents || []).map((inc) =>
+8057:            {filteredWorkers.map((w) => (
+8239:                {currentClientCtx?.workCenters?.map((wc, idx) => (
+8258:                                setSelectedWorkerIds(workers.filter(w => w.workCenterId === selectedMassiveWorkCenter && w.status === 'active').map(w => w.id));
+8266:                        {workers.filter(w => w.workCenterId === selectedMassiveWorkCenter && w.status === 'active').map(w => (
+8329:                      {massiveEppItems.map((item, idx) => (
+8723:                      {currentClientCtx?.workCenters?.map((wc, idx) => (
+8968:                    {(formData.incidents || []).map((inc: any) => (
+9104:                    {(formData.eppRecords || []).map((record: EppRecord) => (
+9188:                          .map((t: any) => (
+9257:                        workerIRLs.filter((irl) => irl.workerId === editingWorker.id).map((irl) => (
+9526:                  {currentClientCtx?.workCenters?.map((wc, idx) => (
+9651:                    {currentClientCtx?.workCenters?.map((wc, idx) => (
+9691:                                    setSelectedWorkerIdsToAssign(filtered.map(w => w.id));
+9700:                            {filtered.map(w => {
+9791:                  {reassigningWorkersTarget.map(w => (
+10218:                  {clients.map((c) => (
+10287:              }).map(([key, label]) => (
+10350:                {customItems.map((item) => (
+10361:                            customItems.map((i) =>
+10586:                {extinguishers.map((e) => (
+10854:      items: DS44_REQUIREMENTS.map((r) => ({
+11002:              {clients.map((c) => (
+11036:            {DS44_REQUIREMENTS.map((req) => (
+11277:        const dbRecords = s.docs.map((d) => {
+11307:            .map((d) => ({ id: d.id, ...d.data() }) as any)
+11378:      prev.map((r) => {
+11625:          records.map((record, idx) => {
+11857:                                    MIPER_LEGAL_RISKS.map((r) => r.categoria),
+11859:                                ).map((c) => (
+11896:                                    ).map((r) => r.familia),
+11898:                                ).map((f) => (
+11946:                                ).map((r) => (
+12226:                            ].map((item) => (
+12517:            {historicalReports.map((report) => (
+12638:          {(clients || []).map((c: any) => (
+12777:      [catKey]: (template[catKey] || []).map((r: any) =>
+12899:        {CATEGORIES.map((cat, idx) => (
+12943:                (template[cat.key] || []).map((risk: any, i: number) => (
+13122:                miperRecords.map((mr: any) => (
+13192:        setTemplates(s.docs.map((d) => ({ id: d.id, ...d.data() })));
+13311:          {filteredTemplates.map((t) => (
+13368:              {filteredTemplates.map((t) => (
+13513:        setTemplates(s.docs.map((d) => ({ id: d.id, ...d.data() })));
+13526:        setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() })));
+13540:          .map((d) => ({ id: d.id, ...d.data() }))
+13740:                  {workers.map((w) => (
+13759:                  {templates.map((t) => (
+13922:            {records.map((r) => (
+14110:        {clients.map((c: any) => (
+14171:          setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Worker));
+14196:    (w.incidents || []).map((i) => ({
+14283:    const data = Object.entries(monthlyData).map(([name, value]) => ({
+14415:          {clients.map((c) => (
+14660:                  {allIncidents.map((i, idx) => (
+14861:    responses: GRD_QUESTIONS.map((q) => ({
+14881:          s.docs.map((d) => ({ id: d.id, ...d.data() }) as GRDInspection),
+14907:      responses: GRD_QUESTIONS.map((q) => ({
+15012:        responses: GRD_QUESTIONS.map((q) => ({
+15062:            {clients.map((c: any) => (
+15140:            inspections.map((insp) => (
+15225:            {GRD_QUESTIONS.map((q, idx) => (
+15266:                      {(["SI", "NO", "N/A"] as const).map((opt) => {
+15345:      p.items.map((i) => ({
+15364:          s.docs.map((d) => ({ id: d.id, ...d.data() }) as MinsalAudit),
+15385:        s.docs.map((d) => ({ id: d.id, ...d.data() }) as CustomMinsalProtocol),
+15406:        p.items.map((i) => ({
+15553:      const preparedItems = (editingCustom.items || []).map((it) => ({
+15613:            {clients.map((c: any) => (
+15697:            audits.map((audit) => (
+15773:                  {MINSAL_PROTOCOLS.map((p) => (
+15784:              {customProtocols.map((p) => (
+15817:                    {p.items?.slice(0, 2).map((it) => (
+15844:                {mergedProtocols.map((p) => p.id.toUpperCase()).join(" • ")}
+15869:            {mergedProtocols.map((protocol) => {
+15931:                      allItems.map((item) => (
+15941:                            {(["NO", "EN_PROCESO", "FINALIZADO"] as const).map(
+16054:                    {(editingCustom?.items || []).map((item, idx) => (
+16145:      setClientWorkers(snap.docs.map(d => d.data()));
+16416:                    {filteredWorkers.map(w => (
+16491:                {recentDiseases.map((dis) => (
+16678:                ].map((t) => (
+17130:                  ].map((c) => (
+18403:          const loadedClients = snapshot.docs.map((d) => ({
+18441:            {clients.map((client) => (
+18608:      setClientWorkers(snap.docs.map(d => d.data()));
+18891:                    {filteredWorkers.map(w => (
+18966:                {recentAccidents.map((acc) => (
+19170:                {["Privada", "Pública"].map((p) => (
+19201:                ].map((t) => (
+19470:                  {["D", "M", "A"].map((u) => (
+19820:                    {["SI", "NO"].map((opt) => (
+19857:                  {["Trabajo", "Trayecto"].map((t) => (
+19893:                      ].map((dt) => (
+19929:                        ].map((mp) => (
+20007:                ].map((c) => (

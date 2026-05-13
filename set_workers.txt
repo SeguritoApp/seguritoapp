@@ -1,0 +1,118 @@
+727-  const [showSuccessModal, setShowSuccessModal] = useState(false);
+728-
+729-  useEffect(() => {
+730-    if (isOpen) {
+731-      setSelectedClientId("");
+732:      setWorkers([]);
+733-      setSelectedWorkerId("");
+734-      setCentro("");
+735-      setObservaciones("");
+736-      setShowSuccessModal(false);
+737-      setItems(
+--
+747-    }
+748-  }, [isOpen]);
+749-
+750-  useEffect(() => {
+751-    if (!selectedClientId) {
+752:      setWorkers([]);
+753-      return;
+754-    }
+755-    const q = query(
+756-      collection(db, `clients/${selectedClientId}/workers`),
+757-      where("status", "==", "active"),
+758-    );
+759-    const unsub = onSnapshot(q, (s) => {
+760:      setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Worker));
+761-    });
+762-    return () => unsub();
+763-  }, [selectedClientId]);
+764-
+765-  const handleSave = async () => {
+--
+1121-      const q = query(
+1122-        collection(db, `clients/${selectedClientId}/workers`),
+1123-        orderBy("firstName"),
+1124-      );
+1125-      return onSnapshot(q, (s) => {
+1126:        setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Worker));
+1127-      });
+1128-    } else {
+1129:      setWorkers([]);
+1130-    }
+1131-  }, [selectedClientId]);
+1132-
+1133-  const handleSave = async () => {
+1134-    if (!selectedClientId) {
+--
+5423-      collection(db, `clients/${selectedClientId}/workers`),
+5424-    );
+5425-    const unsubWorkers = onSnapshot(
+5426-      qWorkers,
+5427-      (s) => {
+5428:        setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Worker));
+5429-        setLoading(false);
+5430-      },
+5431-      (e) => handleFirestoreError(e, "list", "workers"),
+5432-    );
+5433-
+--
+7301-      limit(200),
+7302-    );
+7303-    const unsubWorkers = onSnapshot(
+7304-      q,
+7305-      (s) => {
+7306:        setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Worker));
+7307-        setLoading(false);
+7308-      },
+7309-      (error) => handleFirestoreError(error, "list", "workers"),
+7310-    );
+7311-
+--
+9882-    if (!selectedClientId) return;
+9883-    const draft = localStorage.getItem(`draft_594_${selectedClientId}`);
+9884-    if (draft) {
+9885-      try {
+9886-        const d = JSON.parse(draft);
+9887:        setWorkers(d.workers || 0);
+9888-        setSurfaceArea(d.surfaceArea || 0);
+9889-        setActualToilets(d.actualToilets || 0);
+9890-        setActualShowers(d.actualShowers || 0);
+9891-        setActualWashbasins(d.actualWashbasins || 0);
+9892-        setHasPotableWater(d.hasPotableWater ?? true);
+--
+10227-                  Dotación Máxima por Turno
+10228-                </label>
+10229-                <input
+10230-                  type="number"
+10231-                  value={workers}
+10232:                  onChange={(e) => setWorkers(parseInt(e.target.value) || 0)}
+10233-                  className="w-full bg-slate-50 p-3 rounded-xl font-bold outline-none border border-slate-200 text-sm"
+10234-                />
+10235-              </div>
+10236-              <div className="space-y-1.5">
+10237-                <label className="text-[10px] font-bold uppercase tracking-widest text-slate-400 ml-1">
+--
+13521-    );
+13522-    // Load workers
+13523-    const unsubWorkers = onSnapshot(
+13524-      query(collection(db, `clients/${selectedClientId}/workers`)),
+13525-      (s) => {
+13526:        setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() })));
+13527-      },
+13528-      (error) =>
+13529-        handleFirestoreError(
+13530-          error,
+13531-          "list",
+--
+14166-      setLoading(true);
+14167-      const q = query(collection(db, `clients/${selectedClientId}/workers`));
+14168-      const unsubWorkers = onSnapshot(
+14169-        q,
+14170-        (s) => {
+14171:          setWorkers(s.docs.map((d) => ({ id: d.id, ...d.data() }) as Worker));
+14172-          setLoading(false);
+14173-        },
+14174-        (error) => handleFirestoreError(error, "list", "workers"),
+14175-      );
+14176-      

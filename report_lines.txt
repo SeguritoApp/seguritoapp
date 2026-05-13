@@ -1,0 +1,38 @@
+140:  | "reports"
+1234:        collection(db, `clients/${selectedClientId}/reports`),
+4202:      collection(db, `clients/${selectedClientId}/reports`),
+4220:      handleFirestoreError(e, "create", "reports");
+5257:  const [reports, setReports] = useState<ClientReport[]>([]);
+5360:      collection(db, `clients/${selectedClientId}/reports`),
+5370:      (e) => handleFirestoreError(e, "list", "reports"),
+5691:    ...reports.map((r) => ({ ...r, libraryType: "report" as const })),
+5948:        reports: selectedReports,
+6052:                        ? "reports"
+6069:                        ? "reports"
+7123:  const [reports, setReports] = useState<ClientReport[]>([]);
+7313:      collection(db, `clients/${selectedClientId}/reports`),
+7321:      (error) => handleFirestoreError(error, "list", "reports")
+7384:      const reportRef = doc(collection(db, `clients/${selectedClientId}/reports`));
+7708:            collection(db, `clients/${selectedClientId}/reports`),
+7903:      collection(db, `clients/${selectedClientId}/reports`),
+7921:      handleFirestoreError(e, "create", "reports");
+9017:                            const relatedInv = reports.find(r => r.type === "investigation_report" && r.dataSnapshot?.incidentId === inc.id);
+10052:        `clients/${selectedClientId}/reports`,
+10781:    const qReports = query(collection(db, `clients/${selectedClientId}/reports`));
+10788:      (error) => handleFirestoreError(error, "list", "reports")
+10876:      collection(db, `clients/${selectedClientId}/reports`),
+10894:      handleFirestoreError(e, "create", "reports");
+11299:      collection(db, `clients/${selectedClientId}/reports`),
+11315:          `clients/${selectedClientId}/reports`,
+11430:        `clients/${selectedClientId}/reports`,
+11463:          `clients/${selectedClientId}/reports`,
+11500:      collection(db, `clients/${selectedClientId}/reports`),
+11518:      handleFirestoreError(e, "create", `clients/${selectedClientId}/reports`);
+14177:      const qReports = query(collection(db, `clients/${selectedClientId}/reports`));
+14184:        (error) => handleFirestoreError(error, "list", "reports"),
+14340:      collection(db, `clients/${selectedClientId}/reports`),
+14361:      handleFirestoreError(e, "create", `clients/${selectedClientId}/reports`);
+14969:      // Add to unified reports list
+14980:        collection(db, `clients/${selectedClientId}/reports`),
+15449:      // Add to unified reports list
+15460:        collection(db, `clients/${selectedClientId}/reports`),

@@ -1,0 +1,86 @@
+150:  | "workers"
+745:  const [workers, setWorkers] = useState<Worker[]>([]);
+819:      const workerRef = doc(db, `clients/${selectedClientId}/workers/${selectedWorkerId}`);
+820:      const workerMatch = workers.find((w) => w.id === selectedWorkerId);
+841:      handleFirestoreError(e, "update", `clients/${selectedClientId}/workers/${selectedWorkerId}`);
+940:                  {workers.length === 0 ? (
+945:                    workers.map((w, wIdx) => (
+1160:  const [workers, setWorkers] = useState<Worker[]>([]);
+1240:      const w = workers.find((w) => w.id === selectedWorkerId);
+1251:        `clients/${selectedClientId}/workers`,
+1404:                        onNavigate("workers", selectedClientId);
+1435:                        ) : workers.length === 0 ? (
+1440:                          workers.map((w, wIdx) => (
+1772:                collection(db, `clients/${clientRef.id}/workers`),
+2313:              active={currentView === "workers"}
+2314:              onClick={() => setCurrentView("workers")}
+2686:                {currentView === "workers" && (
+2816:                  "workers",
+2892:                        setCurrentView("workers");
+2895:                      className={`w-full text-left font-bold text-lg py-2 flex items-center gap-4 ${currentView === "workers" ? "text-orange-500" : "text-slate-700"}`}
+5740:        getDocs(query(collection(db, `clients/${selectedClientId}/workers`))),
+6046:          const workerRef = doc(db, `clients/${selectedClientId}/workers`, selectedWorkerId);
+6058:          handleFirestoreError(e, "get", `workers/${selectedWorkerId}`);
+6394:              onClick={() => onNavigate("workers")}
+7401:  const [workers, setWorkers] = useState<Worker[]>([]);
+7511:    const workersToReassign = workers.filter(w => selectedWorkerIdsToAssign.includes(w.id) && w.workCenterId && w.workCenterId !== assignWcId);
+7523:        const workerRef = doc(db, `clients/${selectedClientId}/workers`, workerId);
+7533:      handleFirestoreError(error, "write", `clients/${selectedClientId}/workers`);
+7571:        getDocs(query(collection(db, `clients/${selectedClientId}/workers`), orderBy("firstName"))),
+7590:      handleFirestoreError(error, "list", "workers");
+7610:      const affectedWorkers = workers.filter(w => selectedWorkerIds.includes(w.id));
+7625:              const workerRef = doc(db, `clients/${selectedClientId}/workers`, worker.id);
+7635:          const workerRef = doc(db, `clients/${selectedClientId}/workers`, worker.id);
+7722:      handleFirestoreError(e, "update", "workers (massive)");
+7855:        await updateDoc(doc(db, `clients/${selectedClientId}/workers/${editingWorker.id}`), {
+7860:        handleFirestoreError(e, "update" as any, `clients/${selectedClientId}/workers`);
+7879:        await updateDoc(doc(db, `clients/${selectedClientId}/workers/${editingWorker.id}`), {
+7884:        handleFirestoreError(e, "update" as any, `clients/${selectedClientId}/workers`);
+7924:      const ref = collection(db, `clients/${selectedClientId}/workers`);
+7937:          doc(db, `clients/${selectedClientId}/workers`, workerId),
+7942:          doc(db, `clients/${selectedClientId}/workers`, workerId),
+8030:      handleFirestoreError(e, "write", `clients/${selectedClientId}/workers`);
+8037:    const worker = workers.find((w) => w.id === id);
+8048:        doc(db, `clients/${selectedClientId}/workers`, workerToDelete.id),
+8067:        `clients/${selectedClientId}/workers/${workerToDelete.id}`,
+8077:        doc(db, `clients/${selectedClientId}/workers`, worker.id),
+8088:        `clients/${selectedClientId}/workers/${worker.id}`,
+8406:         const existing = workers.find(ew => ew.rut && normalizeRut(ew.rut) === rutStr);
+8441:       const ref = collection(db, `clients/${selectedClientId}/workers`);
+8462:              doc(db, `clients/${selectedClientId}/workers`, workerId),
+8482:               doc(db, `clients/${selectedClientId}/workers`, workerId),
+8522:       handleFirestoreError(err, "write", `clients/${selectedClientId}/workers`);
+8532:  const filteredWorkers = workers.filter((w) => {
+8938:                    {workers.filter(w => w.workCenterId === selectedMassiveWorkCenter && w.status === 'active').length === 0 ? (
+8945:                            checked={selectedWorkerIds.length > 0 && selectedWorkerIds.length === workers.filter(w => w.workCenterId === selectedMassiveWorkCenter && w.status === 'active').length}
+8948:                                setSelectedWorkerIds(workers.filter(w => w.workCenterId === selectedMassiveWorkCenter && w.status === 'active').map(w => w.id));
+8956:                        {workers.filter(w => w.workCenterId === selectedMassiveWorkCenter && w.status === "active").map((w, wIdx) => (
+10421:                        const filtered = workers.filter(w => {
+10759:  const [workers, setWorkers] = useState<number>(0);
+10811:        setWorkers(d.workers || 0);
+10834:      workers,
+10854:    workers,
+10877:    LEGAL_LIMITS.sshh.find((r) => workers <= r.workers) ||
+10878:    (workers > 100
+10880:          toilets: 6 + Math.ceil((workers - 100) / 15),
+10881:          washbasins: 6 + Math.ceil((workers - 100) / 15),
+10882:          showers: 10 + Math.ceil((workers - 100) / 10),
+10895:      workers *
+10917:        employeeCount: workers,
+10941:        workers,
+11051:      workers,
+11201:                  value={workers}
+14753:  const [workers, setWorkers] = useState<any[]>([]);
+14780:          getDocs(query(collection(db, `clients/${selectedClientId}/workers`))),
+14856:      const selectedWorker = workers.find((w) => w.id === form.workerId);
+14988:                  {workers.map((w, wIdx) => (
+15410:  const [workers, setWorkers] = useState<Worker[]>([]);
+15422:        const qWorkers = query(collection(db, `clients/${selectedClientId}/workers`));
+15446:  // DS 67 Calculations - Feed from workers incident data
+15447:  const allIncidents = workers.flatMap((w) =>
+15457:  const avgWorkers = manualAvgWorkers ? parseFloat(manualAvgWorkers) : Math.max(workers.length, 1);
+15740:              placeholder={`Automático (${workers.length || 1})`}
+17855:      const workersRef = collection(db, "clients", selectedClientId, "workers");
+17928:        `clients/${selectedClientId}/workers`,
+20342:      const workersRef = collection(db, "clients", selectedClientId, "workers");
+20414:        `clients/${selectedClientId}/workers`,
