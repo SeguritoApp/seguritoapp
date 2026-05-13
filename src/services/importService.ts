@@ -66,7 +66,18 @@ export const mapHeadersToWorkerFields = (headers: string[]): Record<string, stri
 // --- GEMINI INTELLIGENT PARSING LOGIC ---
 
 // Ensure you have initialized ai somewhere or initialize it here:
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+let aiClient: GoogleGenAI | null = null;
+
+const getAI = () => {
+  if (!aiClient) {
+    const key = (process.env as any).GEMINI_API_KEY;
+    if (!key) {
+      console.warn("GEMINI_API_KEY is not defined. AI mapping may fail. Make sure it is injected by the bundler or environment.");
+    }
+    aiClient = new GoogleGenAI({ apiKey: key || 'dummy-key' });
+  }
+  return aiClient;
+};
 
 /**
  * Intelligent parser using Gemini API (Structured Outputs)
@@ -74,6 +85,8 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
  */
 export const parseWorkersWithGemini = async (rawRows: any[]) => {
   if (rawRows.length === 0) return [];
+  
+  const ai = getAI();
   
   // Find header row by scoring
   let headerRow = -1;
