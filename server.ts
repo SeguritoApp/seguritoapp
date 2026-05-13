@@ -21,7 +21,7 @@ try {
 
 async function startServer() {
   const app = express();
-  const PORT = process.env.PORT || 3000;
+  const PORT = 3000;
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
@@ -386,7 +386,7 @@ async function startServer() {
   });
 
   // --- Vite Middleware ---
-  const isProd = process.env.NODE_ENV === "production" || (__filename && __filename.endsWith(".cjs"));
+  const isProd = process.env.NODE_ENV === "production" || process.argv[1]?.endsWith("server.cjs");
 
   if (!isProd) {
     const vite = await createViteServer({
@@ -395,16 +395,14 @@ async function startServer() {
     });
     app.use(vite.middlewares);
   } else {
-    // In production, __dirname is usually the 'dist' directory because the file is dist/server.cjs.
-    // If not, it might be the project root.
-    const fs = require('fs');
-    let distPath = path.join(process.cwd(), 'dist');
-    if (fs.existsSync(path.join(__dirname, 'index.html'))) {
+    let distPath = '';
+    if (typeof __dirname !== 'undefined') {
+      // In CJS bundle (dist/server.cjs), __dirname points exactly to the dist directory
       distPath = __dirname;
-    } else if (fs.existsSync(path.join(__dirname, 'dist', 'index.html'))) {
-      distPath = path.join(__dirname, 'dist');
+    } else {
+      distPath = path.join(process.cwd(), 'dist');
     }
-
+    
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       res.sendFile(path.join(distPath, 'index.html'));
