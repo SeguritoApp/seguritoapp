@@ -152,6 +152,7 @@ import { UpgradeModal } from "./components/UpgradeModal";
 import { PaymentStatusModal } from "./components/PaymentStatusModal";
 import { CacheDebugger } from "./components/CacheDebugger";
 import { ProceduresView } from "./ProceduresView";
+import { InstallPrompt } from "./components/InstallPrompt";
 import { QuickSafetyIncidentModal } from "./views/QuickSafetyIncidentModal";
 
 // --- Types ---
@@ -3309,6 +3310,7 @@ export default function App() {
         user={user}
         profile={profile}
       />
+      <InstallPrompt />
       {user?.email === "estudiofjc@gmail.com" && <CacheDebugger />}
     </div>
   );
