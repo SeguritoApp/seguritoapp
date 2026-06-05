@@ -8,28 +8,46 @@ export const InstallAppButton = () => {
   const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
-    if (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone) {
-      setIsStandalone(true);
-      return;
-    }
+    // Definimos función para revisar estado
+    const checkIsStandalone = () => {
+      const isStandaloneMedia = window.matchMedia('(display-mode: standalone)').matches;
+      const navigatorStandalone = (window.navigator as any).standalone === true;
+      const isMinimalUi = window.matchMedia('(display-mode: minimal-ui)').matches;
+      const isFullscreen = window.matchMedia('(display-mode: fullscreen)').matches;
+      return isStandaloneMedia || navigatorStandalone || isMinimalUi || isFullscreen;
+    };
+
+    setIsStandalone(checkIsStandalone());
 
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isIOSDevice = /iphone|ipad|ipod/.test(userAgent);
     setIsIos(isIOSDevice);
 
-    if (!isIOSDevice) {
-      const handler = (e: Event) => {
-        e.preventDefault();
-        setDeferredPrompt(e);
-      };
-      window.addEventListener('beforeinstallprompt', handler);
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e);
+      // We know it is installable from browser so it's not standalone
+      setIsStandalone(false);
+    };
 
-      if ((window as any).deferredPrompt) {
-        setDeferredPrompt((window as any).deferredPrompt);
-      }
-
-      return () => window.removeEventListener('beforeinstallprompt', handler);
+    // Use property on window in case the event fired before we mounted
+    if ('deferredPrompt' in window) {
+      setDeferredPrompt((window as any).deferredPrompt);
     }
+
+    window.addEventListener('beforeinstallprompt', handler);
+
+    // App installed event
+    const installHandler = () => {
+      setIsStandalone(true);
+      setDeferredPrompt(null);
+    };
+    window.addEventListener('appinstalled', installHandler);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+      window.removeEventListener('appinstalled', installHandler);
+    };
   }, []);
 
   const handleInstallClick = async () => {
@@ -37,16 +55,19 @@ export const InstallAppButton = () => {
       if (isIos) {
          alert("Para instalar en iOS, toca el botón de 'Compartir' en Safari y selecciona 'Agregar a inicio'.");
       } else {
-         alert("Para tener la mejor experiencia en tu móvil o tablet, toca los 3 puntos ⋮ en tu navegador y selecciona 'Instalar aplicación' o 'Añadir a inicio'.");
+         alert("Para tener la mejor experiencia, instala la aplicación tocando los 3 puntos ⋮ en tu navegador y selecciona 'Instalar aplicación' o 'Añadir a inicio'.");
       }
       return;
     }
 
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
-       setIsStandalone(true);
+    try {
+      deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+         setIsStandalone(true);
+      }
+    } catch(err) {
+      console.error(err);
     }
     setDeferredPrompt(null);
   };
@@ -56,10 +77,10 @@ export const InstallAppButton = () => {
   return (
     <button
       onClick={handleInstallClick}
-      className="w-full sm:w-auto flex-shrink-0 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2.5 rounded-xl font-black uppercase text-[11px] tracking-widest hover:from-orange-600 hover:to-orange-700 transition-all shadow-xl shadow-orange-500/30 flex justify-center items-center gap-3 active:scale-95 group"
+      className="bg-gradient-to-r from-orange-500 to-orange-600 text-white px-4 py-2 sm:px-6 sm:py-2.5 rounded-xl font-black uppercase text-[11px] sm:text-xs tracking-widest hover:from-orange-600 hover:to-orange-700 transition-all shadow-xl shadow-orange-500/30 flex justify-center items-center gap-2 active:scale-95 shrink-0"
     >
-      <Download size={20} className="group-hover:translate-y-1 transition-transform duration-300" />
-      Instalar App
+      <Download size={16} className="hidden sm:block" />
+      Descargar App
     </button>
   );
 };
