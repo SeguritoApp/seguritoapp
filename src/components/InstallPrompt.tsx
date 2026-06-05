@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Download, X, Smartphone } from 'lucide-react';
+import { Download, Smartphone, Share } from 'lucide-react';
 
 export const InstallPrompt = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showBanner, setShowBanner] = useState(false);
   const [isStandalone, setIsStandalone] = useState(false);
+  const [isIos, setIsIos] = useState(false);
 
   useEffect(() => {
     // Check if the app is already installed
@@ -14,88 +15,101 @@ export const InstallPrompt = () => {
       return;
     }
 
-    const handler = (e: Event) => {
-      // Prevent the mini-infobar from appearing on mobile
-      e.preventDefault();
-      // Stash the event so it can be triggered later.
-      setDeferredPrompt(e);
-      // Show the install banner after a short delay
-      setTimeout(() => setShowBanner(true), 3000);
-    };
+    // Detect iOS
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isIOSDevice = /iphone|ipad|ipod/.test(userAgent);
+    setIsIos(isIOSDevice);
 
-    window.addEventListener('beforeinstallprompt', handler);
+    if (isIOSDevice) {
+      setShowBanner(true);
+    } else {
+      const handler = (e: Event) => {
+        e.preventDefault();
+        setDeferredPrompt(e);
+        setShowBanner(true);
+      };
 
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handler);
-    };
+      window.addEventListener('beforeinstallprompt', handler);
+
+      // Si ya está listo el prompt antes de que monte (a veces pasa intermitentemente)
+      if ((window as any).deferredPrompt) {
+        setDeferredPrompt((window as any).deferredPrompt);
+        setShowBanner(true);
+      }
+
+      return () => {
+        window.removeEventListener('beforeinstallprompt', handler);
+      };
+    }
   }, []);
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
-    
-    // Show the install prompt
     deferredPrompt.prompt();
-    
-    // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
       console.log('User accepted the install prompt');
       setShowBanner(false);
+      setIsStandalone(true);
     } else {
       console.log('User dismissed the install prompt');
     }
     
-    // We can't use the prompt again, discard it
     setDeferredPrompt(null);
   };
 
-  const handleClose = () => {
-    setShowBanner(false);
-  };
-
-  if (isStandalone || !deferredPrompt) return null;
+  if (isStandalone) return null;
+  if (!isIos && !deferredPrompt) return null;
 
   return (
     <AnimatePresence>
       {showBanner && (
         <motion.div
-          initial={{ y: 100, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 100, opacity: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 25 }}
-          className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:w-96 z-[9999]"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
+          className="mb-8"
         >
-          <div className="bg-white rounded-2xl shadow-2xl border border-slate-100 p-4 md:p-5 overflow-hidden relative">
-            <div className="absolute top-0 left-0 w-1 h-full bg-orange-500"></div>
+          <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl shadow-lg border border-orange-400 p-5 md:p-6 text-white relative overflow-hidden">
+            <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+            <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
             
-            <button 
-              onClick={handleClose}
-              className="absolute top-3 right-3 text-slate-400 hover:text-slate-600 hover:bg-slate-100 p-1 rounded-full transition-colors"
-            >
-              <X size={18} />
-            </button>
-
-            <div className="flex gap-4 items-start pr-6">
-              <div className="w-12 h-12 bg-orange-50 text-orange-600 rounded-xl flex items-center justify-center shrink-0">
-                <Smartphone size={24} />
+            <div className="relative z-10 flex flex-col md:flex-row gap-6 items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-white/20 text-white rounded-xl flex items-center justify-center shrink-0 backdrop-blur-sm border border-white/30">
+                  <Smartphone size={28} />
+                </div>
+                
+                <div>
+                  <h3 className="font-black text-white text-lg md:text-xl tracking-tight leading-tight mb-1">
+                    Lleva SeguritoApp en tu móvil
+                  </h3>
+                  <p className="text-orange-100 text-sm md:text-base font-medium max-w-xl">
+                    {isIos ? (
+                      <>Para instalar, toca el botón de <strong className="text-white">Compartir</strong> en Safari y selecciona <strong className="text-white">"Agregar a inicio"</strong>.</>
+                    ) : (
+                      <>Instala la aplicación para acceder sin conexión, recibir notificaciones y tener una experiencia más rápida.</>
+                    )}
+                  </p>
+                </div>
               </div>
               
-              <div className="flex-1">
-                <h3 className="font-black text-slate-800 text-sm md:text-base leading-tight mb-1">
-                  Instala SeguritoApp
-                </h3>
-                <p className="text-xs text-slate-500 font-medium mb-3 leading-relaxed">
-                  Para una experiencia más rápida y acceso directo desde el escritorio o pantalla de inicio de tu móvil.
-                </p>
-                
-                <button
-                  onClick={handleInstallClick}
-                  className="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors uppercase tracking-widest"
-                >
-                  <Download size={16} />
-                  Instalar Aplicación
-                </button>
+              <div className="w-full md:w-auto shrink-0">
+                {isIos ? (
+                  <div className="flex items-center justify-center gap-3 bg-white/20 px-4 py-3 rounded-xl border border-white/30 backdrop-blur-sm w-full">
+                    <Share size={20} className="text-white" />
+                    <span className="text-sm text-white font-bold uppercase tracking-wider">Compartir &rarr; Agregar a inicio</span>
+                  </div>
+                ) : (
+                  <button
+                    onClick={handleInstallClick}
+                    className="w-full md:w-auto bg-white text-orange-600 hover:bg-orange-50 font-black py-3 px-6 rounded-xl text-sm flex items-center justify-center gap-2 transition-all uppercase tracking-widest shadow-xl shadow-orange-900/20 active:scale-95"
+                  >
+                    <Download size={18} />
+                    Instalar ahora
+                  </button>
+                )}
               </div>
             </div>
           </div>
