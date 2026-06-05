@@ -70,7 +70,7 @@ export const InstallAppButton = () => {
     setDeferredPrompt(null);
   };
 
-  if (isStandalone) return null;
+  // if (isStandalone) return null; // Removed so it always shows in dashboard
 
   return (
     <button
@@ -90,10 +90,17 @@ export const InstallPrompt = () => {
   const [isAndroid, setIsAndroid] = useState(false);
 
   useEffect(() => {
+    // Check if user has permanently dismissed the banner
+    const dismissed = localStorage.getItem('installPromptDismissed');
+    
     // Check if the app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone) {
       setIsStandalone(true);
       return;
+    }
+
+    if (dismissed === 'true') {
+      return; // Don't show if dismissed
     }
 
     // Detect iOS
@@ -144,7 +151,7 @@ export const InstallPrompt = () => {
     setDeferredPrompt(null);
   };
 
-  if (isStandalone) return null;
+  // if (isStandalone) return null; // Comentado temporalmente para asegurar que siempre se muestra
 
   return (
     <AnimatePresence>
@@ -160,7 +167,10 @@ export const InstallPrompt = () => {
             <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
             
             <button 
-              onClick={() => setShowBanner(false)}
+              onClick={() => {
+                setShowBanner(false);
+                localStorage.setItem('installPromptDismissed', 'true');
+              }}
               className="absolute top-2 right-2 text-white/70 hover:text-white bg-white/10 hover:bg-white/20 p-1.5 rounded-full transition-colors z-20"
             >
               <X size={18} />
