@@ -11,10 +11,8 @@ export const InstallAppButton = () => {
     // Definimos función para revisar estado
     const checkIsStandalone = () => {
       const isStandaloneMedia = window.matchMedia('(display-mode: standalone)').matches;
-      const navigatorStandalone = (window.navigator as any).standalone === true;
-      const isMinimalUi = window.matchMedia('(display-mode: minimal-ui)').matches;
-      const isFullscreen = window.matchMedia('(display-mode: fullscreen)').matches;
-      return isStandaloneMedia || navigatorStandalone || isMinimalUi || isFullscreen;
+      const navigatorStandalone = !!(window.navigator as any).standalone;
+      return isStandaloneMedia || navigatorStandalone;
     };
 
     setIsStandalone(checkIsStandalone());

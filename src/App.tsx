@@ -3483,6 +3483,7 @@ const Dashboard = ({
 
   return (
     <div className="max-w-6xl mx-auto pb-20">
+      <InstallPrompt />
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
           <h2 className="text-xs font-mono uppercase tracking-[0.2em] text-slate-400 font-bold mb-2 flex items-center gap-2">
