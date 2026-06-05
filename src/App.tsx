@@ -3483,16 +3483,18 @@ const Dashboard = ({
 
   return (
     <div className="max-w-6xl mx-auto pb-20">
-      <InstallPrompt />
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-8">
         <div>
           <h2 className="text-xs font-mono uppercase tracking-[0.2em] text-slate-400 font-bold mb-2 flex items-center gap-2">
             <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
             CONTROL TÉCNICO ACTIVADO
           </h2>
-          <h1 className="text-4xl font-bold tracking-tight text-slate-900">
-            Hola, {user?.displayName?.split(" ")[0] || "Profesional"}
-          </h1>
+          <div className="flex flex-wrap items-center gap-3 sm:gap-6 mt-1.5">
+            <h1 className="text-4xl font-bold tracking-tight text-slate-900 shrink-0">
+              Hola, {user?.displayName?.split(" ")[0] || "Profesional"}
+            </h1>
+            <InstallAppButton />
+          </div>
           <div className="flex flex-wrap items-center gap-2 mt-4">
             {user?.metadata?.creationTime &&
               (new Date().getTime() -
@@ -3506,7 +3508,6 @@ const Dashboard = ({
                   <BookOpen size={16} /> Guía Rápida
                 </button>
               )}
-              <InstallAppButton />
           </div>
         </div>
         <div className="flex flex-wrap gap-2 sm:gap-3 w-full md:w-auto">

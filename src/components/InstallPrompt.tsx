@@ -4,11 +4,10 @@ import { Download, Smartphone, Share, X } from 'lucide-react';
 
 export const InstallAppButton = () => {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
-  const [isStandalone, setIsStandalone] = useState(false);
   const [isIos, setIsIos] = useState(false);
+  const [isStandalone, setIsStandalone] = useState(false);
 
   useEffect(() => {
-    // Check if the app is already installed
     if (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone) {
       setIsStandalone(true);
       return;
@@ -38,7 +37,7 @@ export const InstallAppButton = () => {
       if (isIos) {
          alert("Para instalar en iOS, toca el botón de 'Compartir' en Safari y selecciona 'Agregar a inicio'.");
       } else {
-         alert("Para instalar, toca los 3 puntos ⋮ en tu navegador y selecciona 'Instalar aplicación' o 'Añadir a inicio'.");
+         alert("Para tener la mejor experiencia en tu móvil o tablet, toca los 3 puntos ⋮ en tu navegador y selecciona 'Instalar aplicación' o 'Añadir a inicio'.");
       }
       return;
     }
@@ -47,7 +46,7 @@ export const InstallAppButton = () => {
     const { outcome } = await deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
-      setIsStandalone(true);
+       setIsStandalone(true);
     }
     setDeferredPrompt(null);
   };
@@ -57,10 +56,10 @@ export const InstallAppButton = () => {
   return (
     <button
       onClick={handleInstallClick}
-      className="flex items-center justify-center gap-2 bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold py-2 px-4 rounded-xl text-xs transition-colors shadow-sm"
+      className="w-full sm:w-auto flex-shrink-0 bg-gradient-to-r from-orange-500 to-orange-600 text-white px-6 py-2.5 rounded-xl font-black uppercase text-[11px] tracking-widest hover:from-orange-600 hover:to-orange-700 transition-all shadow-xl shadow-orange-500/30 flex justify-center items-center gap-3 active:scale-95 group"
     >
-      <Download size={16} />
-      <span>Instalar App</span>
+      <Download size={20} className="group-hover:translate-y-1 transition-transform duration-300" />
+      Instalar App
     </button>
   );
 };
