@@ -152,7 +152,7 @@ import { UpgradeModal } from "./components/UpgradeModal";
 import { PaymentStatusModal } from "./components/PaymentStatusModal";
 import { CacheDebugger } from "./components/CacheDebugger";
 import { ProceduresView } from "./ProceduresView";
-import { InstallPrompt } from "./components/InstallPrompt";
+import { InstallPrompt, InstallAppButton } from "./components/InstallPrompt";
 import { QuickSafetyIncidentModal } from "./views/QuickSafetyIncidentModal";
 
 // --- Types ---
@@ -3493,18 +3493,21 @@ const Dashboard = ({
           <h1 className="text-4xl font-bold tracking-tight text-slate-900">
             Hola, {user?.displayName?.split(" ")[0] || "Profesional"}
           </h1>
-          {user?.metadata?.creationTime &&
-            (new Date().getTime() -
-              new Date(user.metadata.creationTime).getTime()) /
-              (1000 * 3600 * 24) <=
-              5 && (
-              <button
-                onClick={() => onNavigate("quick_guide")}
-                className="mt-4 flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-orange-200 transition-colors shadow-sm"
-              >
-                <BookOpen size={16} /> Guía Rápida
-              </button>
-            )}
+          <div className="flex flex-wrap items-center gap-2 mt-4">
+            {user?.metadata?.creationTime &&
+              (new Date().getTime() -
+                new Date(user.metadata.creationTime).getTime()) /
+                (1000 * 3600 * 24) <=
+                5 && (
+                <button
+                  onClick={() => onNavigate("quick_guide")}
+                  className="flex items-center gap-2 bg-orange-100 text-orange-600 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-orange-200 transition-colors shadow-sm"
+                >
+                  <BookOpen size={16} /> Guía Rápida
+                </button>
+              )}
+              <InstallAppButton />
+          </div>
         </div>
         <div className="flex flex-wrap gap-2 sm:gap-3 w-full md:w-auto">
           <div className="flex-1 sm:flex-none px-3 sm:px-4 py-3 bg-white rounded-xl border border-slate-200 shadow-sm min-w-[110px]">
