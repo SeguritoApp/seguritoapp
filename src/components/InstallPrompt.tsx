@@ -150,12 +150,12 @@ export const InstallPrompt = () => {
     <AnimatePresence>
       {showBanner && (
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
-          className="mb-8"
+          exit={{ opacity: 0, y: 50 }}
+          className="fixed bottom-4 left-4 right-4 z-[9999] md:bottom-8 md:left-auto md:right-8 md:w-96"
         >
-          <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl shadow-lg border border-orange-400 p-5 md:p-6 text-white relative overflow-hidden">
+          <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl shadow-2xl border border-orange-400 p-5 md:p-6 text-white relative overflow-hidden">
             <div className="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
             <div className="absolute -left-10 -bottom-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
             
