@@ -13,6 +13,7 @@ const savePDFWithLimit = async (doc: jsPDF, filename: string) => {
 interface PDFHeaderData {
   title: string;
   clientName: string;
+  workCenter?: string;
   clientRut?: string;
   clientAddress?: string;
   authorName: string;
@@ -62,10 +63,17 @@ const addHeader = (doc: jsPDF, data: PDFHeaderData) => {
 
   doc.setFontSize(10);
   doc.text(`CLIENTE: ${data.clientName}`, 15, 50);
-  doc.text(`FECHA: ${data.date}`, pageWidth - 15, 50, { align: "right" });
-
-  doc.setDrawColor(230, 230, 230);
-  doc.line(15, 55, pageWidth - 15, 55);
+  
+  if (data.workCenter) {
+    doc.text(`CENTRO: ${data.workCenter}`, 15, 56);
+    doc.text(`FECHA: ${data.date}`, pageWidth - 15, 50, { align: "right" });
+    doc.setDrawColor(230, 230, 230);
+    doc.line(15, 61, pageWidth - 15, 61);
+  } else {
+    doc.text(`FECHA: ${data.date}`, pageWidth - 15, 50, { align: "right" });
+    doc.setDrawColor(230, 230, 230);
+    doc.line(15, 55, pageWidth - 15, 55);
+  }
 };
 
 const addFooter = (doc: jsPDF, data: PDFHeaderData, pageNumber: number) => {
@@ -3667,5 +3675,266 @@ export const generateParityCommitteeSessionPDF = (
   }
 
   savePDFWithLimit(doc, `Acta_Comite_${new Date(session.date).getTime()}.pdf`);
+};
+
+export const generateSafetyIncidentPDF = (
+  incident: any,
+  header: PDFHeaderData,
+) => {
+  if (!checkPDFLimitEarly(header)) return;
+  const doc = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "letter",
+  });
+
+  addHeader(doc, header);
+
+  let currentY = 65;
+  const marginX = 15;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  
+  // Title
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.setTextColor(15, 23, 42); // slate-900
+  doc.text("REPORTE DE INCIDENTE", marginX, currentY);
+  currentY += 10;
+
+  // General Config
+  doc.setFontSize(10);
+  const leftCol = marginX;
+  const rightCol = pageWidth / 2 + 5;
+  const colSpacing = 6;
+  
+  const drawLabelValue = (label: string, value: string, x: number, y: number) => {
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(100, 100, 100);
+    doc.text(label, x, y);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(15, 23, 42);
+    // limit value length for single line or split
+    const split = doc.splitTextToSize(value || "N/A", (pageWidth / 2) - 20);
+    doc.text(split, x, y + 5);
+    return split.length * 5;
+  };
+
+  // Basic Info
+  let leftY = currentY;
+  let rightY = currentY;
+
+  leftY += drawLabelValue("Fecha del Incidente:", incident.date || "-", leftCol, leftY) + colSpacing;
+  rightY += drawLabelValue("Centro de Trabajo:", incident.workCenter || "-", rightCol, rightY) + colSpacing;
+
+  leftY += drawLabelValue("Trabajador / Contratista:", incident.workerName || "-", leftCol, leftY) + colSpacing;
+  rightY += drawLabelValue("Clasificación del Evento:", incident.classification || "-", rightCol, rightY) + colSpacing;
+
+  leftY += drawLabelValue("Potencialidad del Riesgo:", incident.riskPotential || "-", leftCol, leftY) + colSpacing;
+  
+  if (incident.cost !== undefined && incident.cost !== null) {
+    rightY += drawLabelValue("Costo Asociado:", `$${incident.cost.toLocaleString("es-CL")}`, rightCol, rightY) + colSpacing;
+  } else {
+    rightY += drawLabelValue("Costo Asociado:", "-", rightCol, rightY) + colSpacing;
+  }
+
+  currentY = Math.max(leftY, rightY) + 5;
+
+  // Full width fields
+  const drawFullWidthSection = (title: string, content: string) => {
+    if (currentY > 240) {
+      doc.addPage();
+      addHeader(doc, header);
+      currentY = 65;
+    }
+    
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(15, 23, 42);
+    doc.setFillColor(248, 250, 252); // slate-50
+    doc.rect(marginX, currentY, pageWidth - marginX * 2, 8, "F");
+    doc.text(title, marginX + 2, currentY + 6);
+    currentY += 12;
+
+    doc.setFont("helvetica", "normal");
+    const splitText = doc.splitTextToSize(content || "Sin información.", pageWidth - marginX * 2);
+    doc.text(splitText, marginX, currentY);
+    currentY += splitText.length * 5 + 8;
+  };
+
+  drawFullWidthSection("1. Lugar del Incidente", incident.location);
+  drawFullWidthSection("2. Peligro Observado", incident.observedHazard);
+  drawFullWidthSection("3. Acciones Correctivas Dadas", incident.correctiveActions);
+  drawFullWidthSection("4. Medidas de Control a Implementar", incident.controlMeasures);
+
+  // Footer for all pages
+  const pageCount = (doc as any).internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    if (i > 1) {
+      addHeader(doc, header);
+    }
+    addFooter(doc, header, i);
+  }
+
+  savePDFWithLimit(doc, `Reporte_Incidente_${new Date(incident.date).getTime()}.pdf`);
+};
+
+export const generateProfessionalReportPDF = (data: any, header: PDFHeaderData) => {
+  if (!checkPDFLimitEarly(header)) return;
+  const doc = new jsPDF({
+    orientation: "portrait",
+    unit: "mm",
+    format: "letter",
+  });
+
+  addHeader(doc, header);
+
+  let currentY = header.workCenter ? 70 : 65;
+
+  const sectionTitle = (title: string, bg: number[] = [240, 240, 240]) => {
+    if (currentY > 230) {
+      doc.addPage();
+      addHeader(doc, header);
+      currentY = header.workCenter ? 70 : 65;
+    }
+    doc.setFillColor(bg[0], bg[1], bg[2]);
+    doc.rect(15, currentY, 185, 8, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(10);
+    doc.setTextColor(30, 30, 30);
+    doc.text(title, 18, currentY + 6);
+    currentY += 12;
+  };
+
+  sectionTitle("1. Resumen de Período", [200, 220, 240]);
+  
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text(`Período de Evaluación: ${data.period}`, 15, currentY);
+  currentY += 15;
+
+  sectionTitle("2. Estadísticas de Gestión", [200, 240, 200]);
+
+  // Framed Boxes for Stats
+  const startX = 15;
+  const boxWidth = 43;
+  const boxHeight = 25;
+  const gap = 4;
+
+  const statBoxes = [
+    { label: "Trabajadores", value: data.stats.workers },
+    { label: "Obj. Gantt Logrados", value: data.stats.objectivesAchieved },
+    { label: "Procedimientos", value: data.stats.procedures },
+    { label: "Incidentes/Acc.", value: data.stats.accidents }
+  ];
+
+  doc.setDrawColor(200, 200, 200);
+  doc.setLineWidth(0.3);
+
+  statBoxes.forEach((box, index) => {
+     const bx = startX + (boxWidth + gap) * index;
+     doc.setFillColor(250, 250, 250);
+     doc.rect(bx, currentY, boxWidth, boxHeight, "FD");
+     
+     // text vertically and horizontally centered
+     doc.setFont("helvetica", "bold");
+     doc.setFontSize(16);
+     doc.setTextColor(50, 50, 50);
+     const vWidth = doc.getTextWidth(String(box.value));
+     doc.text(String(box.value), bx + (boxWidth - vWidth) / 2, currentY + 12);
+
+     doc.setFont("helvetica", "normal");
+     doc.setFontSize(8);
+     doc.setTextColor(100, 100, 100);
+     const lWidth = doc.getTextWidth(box.label);
+     doc.text(box.label, bx + (boxWidth - lWidth) / 2, currentY + 20);
+  });
+  
+  currentY += boxHeight + 15;
+
+          sectionTitle("3. Hallazgos / Observaciones");
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(50, 50, 50);
+
+  const renderCommentsBoxes = (comments: string[], defaultText: string) => {
+    if (!comments || comments.length === 0) {
+      if (currentY > 240) {
+        doc.addPage();
+        addHeader(doc, header);
+        currentY = header.workCenter ? 70 : 65;
+      }
+      const splitText = doc.splitTextToSize(defaultText, 185);
+      doc.text(splitText, 15, currentY);
+      currentY += splitText.length * 5 + 15;
+      return;
+    }
+
+    comments.forEach((comment, index) => {
+      const splitComment = doc.splitTextToSize(comment, 175);
+      const boxH = splitComment.length * 5 + 10;
+      if (currentY + boxH > 240) {
+        doc.addPage();
+        addHeader(doc, header);
+        currentY = header.workCenter ? 70 : 65;
+      }
+
+      // Draw box
+      doc.setDrawColor(200, 200, 200);
+      doc.setFillColor(252, 252, 252);
+      doc.rect(15, currentY, 185, boxH, "FD");
+
+      // Number badge
+      doc.setFillColor(230, 230, 230);
+      doc.rect(15, currentY, 8, boxH, "F");
+      
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8);
+      doc.setTextColor(100, 100, 100);
+      doc.text(String(index + 1), 17, currentY + 6);
+
+      // Text
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(9);
+      doc.setTextColor(50, 50, 50);
+      doc.text(splitComment, 26, currentY + 7);
+      
+      currentY += boxH + 4;
+    });
+    currentY += 10;
+  };
+
+  renderCommentsBoxes(data.findingsComments, "Sin observaciones ingresadas por el profesional sobre hallazgos estructurados.");
+
+  sectionTitle("4. Medidas Correctivas");
+  renderCommentsBoxes(data.correctiveMeasuresComments, "Sin medidas correctivas ingresadas.");
+
+  sectionTitle("5. Declaración de Conformidad");
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(9);
+  doc.setTextColor(50, 50, 50);
+  const declaration = "Por la presente declaro que las acciones preventivas, inspecciones documentales y levantamientos registrados en este reporte reflejan la gestión realizada en representación del cliente de acuerdo con la información obtenida a través de la plataforma.";
+  const splitDeclaration = doc.splitTextToSize(declaration, 185);
+  
+  if (currentY + splitDeclaration.length * 5 > 240) {
+    doc.addPage();
+    addHeader(doc, header);
+    currentY = header.workCenter ? 70 : 65;
+  }
+  
+  doc.text(splitDeclaration, 15, currentY);
+  
+  currentY += splitDeclaration.length * 5 + 15;
+
+  // Footer for all pages
+  const pageCount = (doc as any).internal.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    if (i > 1) {
+      addHeader(doc, header);
+    }
+    addFooter(doc, header, i);
+  }
+
+  savePDFWithLimit(doc, `Reporte_Profesional_${new Date().getTime()}.pdf`);
 };
 

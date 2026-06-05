@@ -4,16 +4,43 @@ import path from "path";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
-import { initializeApp, getApps } from "firebase-admin/app";
+import { initializeApp, getApps, cert } from "firebase-admin/app";
 import { getFirestore, FieldValue } from "firebase-admin/firestore";
+import { getAuth } from "firebase-admin/auth";
+import fs from "fs";
 
 dotenv.config();
 
-// Initialize Firebase Admin using Application Default Credentials
-// This will automatically work in Cloud Run if deployed in the same project as Firebase
+// Attempt to read the firebase-applet-config.json for the client project ID
+let clientProjectId = "";
+let clientDatabaseId = "";
+try {
+  const configContent = fs.readFileSync(path.join(process.cwd(), "firebase-applet-config.json"), "utf8");
+  const config = JSON.parse(configContent);
+  clientProjectId = config.projectId;
+  clientDatabaseId = config.firestoreDatabaseId;
+} catch (err) {
+  console.log("Could not load firebase-applet-config.json for clientProjectId", err);
+}
+
+// Initialize Firebase Admin
 try {
   if (!getApps().length) {
-    initializeApp();
+    let credential;
+    if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+      try {
+        const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+        credential = cert(serviceAccount);
+      } catch (e) {
+        console.error("Failed to parse FIREBASE_SERVICE_ACCOUNT JSON. Check your environment variables.");
+      }
+    }
+    
+    const appOptions: any = {};
+    if (clientProjectId) appOptions.projectId = clientProjectId;
+    if (credential) appOptions.credential = credential;
+
+    initializeApp(appOptions);
   }
 } catch (error) {
   console.error("Failed to initialize Firebase Admin:", error);
@@ -52,6 +79,57 @@ async function startServer() {
   };
 
   // --- API Routes ---
+
+  // Admin route to delete user permanently
+  app.delete("/api/users/:uid", async (req, res) => {
+    try {
+      const authHeader = req.headers.authorization;
+      if (!authHeader?.startsWith("Bearer ")) {
+        return res.status(401).json({ error: "Missing or invalid authorization header" });
+      }
+      
+      const idToken = authHeader.split("Bearer ")[1];
+      const auth = getAuth();
+      const decodedToken = await auth.verifyIdToken(idToken);
+      
+      if (decodedToken.email !== "estudiofjc@gmail.com") {
+        return res.status(403).json({ error: "Forbidden: Superadmin only" });
+      }
+
+      const { uid } = req.params;
+      const db = clientDatabaseId ? getFirestore(clientDatabaseId) : getFirestore();
+
+      // Delete user from Auth
+      try {
+        await auth.deleteUser(uid);
+      } catch(e: any) {
+        console.warn("Notice: Could not delete user from Firebase Auth (might require additional API enablement):", e.message);
+        // Proceed to delete from Firestore even if Auth deletion fails
+      }
+      
+      // Delete user's usages
+      const usageSnapshot = await db.collection("usage").where("userId", "==", uid).get();
+      if (!usageSnapshot.empty) {
+        const bulkWriter = db.bulkWriter();
+        usageSnapshot.docs.forEach(doc => bulkWriter.delete(doc.ref));
+        await bulkWriter.close();
+      }
+
+      // Recursively delete all clients (and subcollections) owned by this user
+      const clientsSnapshot = await db.collection("clients").where("ownerId", "==", uid).get();
+      for (const clientDoc of clientsSnapshot.docs) {
+        await db.recursiveDelete(clientDoc.ref);
+      }
+
+      // Delete user document and any of its subcollections recursively
+      await db.recursiveDelete(db.collection("users").doc(uid));
+
+      res.status(200).json({ success: true, message: "User deleted permanently" });
+    } catch (error: any) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({ error: error.message });
+    }
+  });
 
   // Health check
   app.get("/api/health", (req, res) => {

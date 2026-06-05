@@ -38,6 +38,7 @@ import { MIPER_LEGAL_RISKS } from "./data/miper";
 import { AccidentInvestigationForm } from "./views/AccidentInvestigationForm";
 import { ParityCommitteeView } from "./views/ParityCommitteeView";
 import { SuperAdminView } from "./views/SuperAdminView";
+import { ProfessionalReportModal } from "./views/ProfessionalReportModal";
 import { fetchPredictiveWorkers } from "./lib/workerSearch";
 import { fetchPredictiveClients } from "./lib/clientSearch";
 import {
@@ -143,6 +144,7 @@ import {
   generateMassiveActionPDF,
   generateProcedurePDF,
   generateGeneralProceduresPDF,
+  generateSafetyIncidentPDF,
 } from "./services/pdfService";
 import { parseWorkersWithGemini } from "./services/importService";
 import { getPlanLimits } from "./utils/planLimits";
@@ -150,6 +152,7 @@ import { UpgradeModal } from "./components/UpgradeModal";
 import { PaymentStatusModal } from "./components/PaymentStatusModal";
 import { CacheDebugger } from "./components/CacheDebugger";
 import { ProceduresView } from "./ProceduresView";
+import { QuickSafetyIncidentModal } from "./views/QuickSafetyIncidentModal";
 
 // --- Types ---
 type Plan =
@@ -217,7 +220,7 @@ interface EppRecord {
   items: EppItem[];
 }
 
-interface Worker {
+export interface Worker {
   id: string;
   clientId: string;
   workCenterId?: string;
@@ -241,7 +244,7 @@ interface Worker {
   updatedAt?: any;
 }
 
-interface UserProfile {
+export interface UserProfile {
   uid: string;
   email: string;
   displayName: string;
@@ -255,7 +258,7 @@ interface UserProfile {
   useGmail?: boolean;
 }
 
-interface Client {
+export interface Client {
   id: string;
   name: string;
   rut: string;
@@ -294,7 +297,7 @@ interface Client {
   };
 }
 
-interface ClientReport {
+export interface ClientReport {
   id: string;
   clientId: string;
   title: string;
@@ -313,7 +316,10 @@ interface ClientReport {
     | "massive_epp"
     | "massive_training"
     | "procedure"
-    | "procedures_report";
+    | "procedures_report"
+    | "incident"
+    | "diat"
+    | "diep";
   createdAt: any;
   authorName: string;
   pdfName: string;
@@ -1839,7 +1845,9 @@ export default function App() {
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [clients, setClients] = useState<Client[]>([]);
   const [showQuickIncident, setShowQuickIncident] = useState(false);
+  const [showQuickSafetyIncident, setShowQuickSafetyIncident] = useState(false);
   const [showQuickEpp, setShowQuickEpp] = useState(false);
+  const [showProfessionalReport, setShowProfessionalReport] = useState(false);
   const [showUpgradeModalGlobal, setShowUpgradeModalGlobal] = useState<{
     show: boolean;
     type: string;
@@ -2806,7 +2814,9 @@ export default function App() {
                       setCurrentView("client_file");
                     }}
                     onOpenQuickIncident={() => setShowQuickIncident(true)}
+                    onOpenQuickSafetyIncident={() => setShowQuickSafetyIncident(true)}
                     onOpenQuickEpp={() => setShowQuickEpp(true)}
+                    onOpenProfessionalReport={() => setShowProfessionalReport(true)}
                   />
                 )}
                 {currentView === "diep_diat" && (
@@ -3218,6 +3228,17 @@ export default function App() {
                 >
                   <CreditCard size={20} /> Planes y Pago
                 </button>
+                {user?.email === "estudiofjc@gmail.com" && (
+                  <button
+                    onClick={() => {
+                      setCurrentView("super_admin");
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className={`w-full text-left font-bold text-lg py-2 flex items-center gap-4 ${currentView === "super_admin" ? "text-orange-500" : "text-slate-700"}`}
+                  >
+                    <Database size={20} /> Control / Dev
+                  </button>
+                )}
 
                 <div className="h-px bg-slate-200 mt-8 mb-4" />
                 <button
@@ -3266,6 +3287,14 @@ export default function App() {
           if (clientId) setSelectedClientId(clientId);
         }}
       />
+      <QuickSafetyIncidentModal
+        isOpen={showQuickSafetyIncident}
+        onClose={() => setShowQuickSafetyIncident(false)}
+        user={user}
+        profile={profile}
+        userPlan={userPlan}
+        initialClientId={selectedClientId || ""}
+      />
       <QuickEppModal
         isOpen={showQuickEpp}
         onClose={() => setShowQuickEpp(false)}
@@ -3273,6 +3302,12 @@ export default function App() {
         profile={profile}
         userPlan={userPlan}
         initialClientId={selectedClientId || ""}
+      />
+      <ProfessionalReportModal
+        isOpen={showProfessionalReport}
+        onClose={() => setShowProfessionalReport(false)}
+        user={user}
+        profile={profile}
       />
       {user?.email === "estudiofjc@gmail.com" && <CacheDebugger />}
     </div>
@@ -3286,7 +3321,9 @@ const Dashboard = ({
   onNavigate,
   onSelectClient,
   onOpenQuickIncident,
+  onOpenQuickSafetyIncident,
   onOpenQuickEpp,
+  onOpenProfessionalReport,
 }: {
   user: User | null;
   profile: UserProfile | null;
@@ -3294,7 +3331,9 @@ const Dashboard = ({
   onNavigate: (v: View) => void;
   onSelectClient: (id: string) => void;
   onOpenQuickIncident: () => void;
+  onOpenQuickSafetyIncident: () => void;
   onOpenQuickEpp: () => void;
+  onOpenProfessionalReport: () => void;
 }) => {
   const [counts, setCounts] = useState({
     clients: 0,
@@ -3547,6 +3586,26 @@ const Dashboard = ({
                 className="group-hover:rotate-90 transition-transform duration-300"
               />
               + Procedimiento
+            </button>
+            <button
+              onClick={onOpenQuickSafetyIncident}
+              className="w-full sm:w-auto bg-orange-600 text-white px-6 py-2 rounded-xl font-black uppercase text-[11px] tracking-widest hover:bg-orange-700 transition-all shadow-xl shadow-orange-600/30 flex justify-center items-center gap-3 active:scale-95 group mt-2 sm:mt-0"
+            >
+              <Plus
+                size={20}
+                className="group-hover:rotate-90 transition-transform duration-300"
+              />
+              + Incidente
+            </button>
+            <button
+              onClick={onOpenProfessionalReport}
+              className="w-full sm:w-auto bg-slate-900 text-white px-6 py-2 rounded-xl font-black uppercase text-[11px] tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/30 flex justify-center items-center gap-3 active:scale-95 group mt-2 sm:mt-0"
+            >
+              <FileText
+                size={20}
+                className="group-hover:-translate-y-1 transition-transform duration-300"
+              />
+              + Reporte Profesional
             </button>
           </div>
         </div>
@@ -6403,6 +6462,9 @@ const ClientFileView = ({
         case "individual_accident":
           generateAccidentPDF([report.dataSnapshot], report.headerSnapshot);
           break;
+        case "incident":
+          generateSafetyIncidentPDF(report.dataSnapshot, report.headerSnapshot);
+          break;
         case "investigation_report":
           generateInvestigationPDF(report.dataSnapshot, report.headerSnapshot);
           break;
@@ -7393,6 +7455,7 @@ const ClientFileView = ({
                   >
                     <option value="all">Tipo: Todos</option>
                     <option value="individual_accident">Siniestros</option>
+                    <option value="incident">Incidentes</option>
                     <option value="investigation_report">
                       Investigación de Acc.
                     </option>
@@ -7559,7 +7622,9 @@ const ClientFileView = ({
                                 ? "bg-blue-600 text-white shadow-blue-200"
                                 : record.type === "diep"
                                   ? "bg-teal-50 text-teal-600"
-                                  : record.type === "diat"
+                                  : record.type === "incident"
+                                    ? "bg-red-50 text-red-600"
+                                    : record.type === "diat"
                                     ? "bg-rose-50 text-rose-600"
                                     : "bg-blue-50 text-blue-500"
                       }`}
@@ -7567,6 +7632,8 @@ const ClientFileView = ({
                       {record.type === "grd_report" ||
                       record.type === "minsal_report" ? (
                         <Shield size={20} />
+                      ) : record.type === "incident" ? (
+                        <AlertTriangle size={20} />
                       ) : (
                         <FileText size={20} />
                       )}

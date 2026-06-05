@@ -29,7 +29,7 @@ import {
 } from "recharts";
 
 import { collection, query, getDocs, orderBy, where, getCountFromServer, doc, updateDoc } from "firebase/firestore";
-import { db } from "../services/firebase";
+import { db, auth } from "../services/firebase";
 import { appCache, clearAppCache } from "../services/firestore";
 
 interface UserData {
@@ -50,6 +50,9 @@ export const SuperAdminView = ({ user }: { user: any }) => {
   const [users, setUsers] = useState<UserData[]>([]);
   const [cacheKeys, setCacheKeys] = useState<string[]>([]);
   const [searchUser, setSearchUser] = useState("");
+  const [userToDelete, setUserToDelete] = useState<UserData | null>(null);
+  const [deletingUser, setDeletingUser] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
   
   // Variables de simulación financiera
   const [costPerPdf, setCostPerPdf] = useState<number>(5);
@@ -175,6 +178,37 @@ export const SuperAdminView = ({ user }: { user: any }) => {
       }
     }
     setAuditingAll(false);
+  };
+
+  const handleDeleteUser = async () => {
+    if (!userToDelete) return;
+    setDeletingUser(true);
+    setDeleteError("");
+    try {
+      const idToken = await auth.currentUser?.getIdToken();
+      if (!idToken) throw new Error("No autenticado");
+
+      const response = await fetch(`/api/users/${userToDelete.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${idToken}`
+        }
+      });
+      
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || 'Error al eliminar usuario');
+      }
+
+      // Remove from local state
+      setUsers(prev => prev.filter(u => u.id !== userToDelete.id));
+      setUserToDelete(null);
+    } catch (e: any) {
+      console.error("Error deleting user:", e);
+      setDeleteError(e.message || "Error al eliminar usuario");
+    } finally {
+      setDeletingUser(false);
+    }
   };
 
   const loadData = async () => {
@@ -522,17 +556,26 @@ export const SuperAdminView = ({ user }: { user: any }) => {
                          </td>
                          <td className="px-6 py-4 whitespace-nowrap text-sm text-slate-600">
                            {user?.email === "estudiofjc@gmail.com" ? (
-                             <select
-                                value={u.subscriptionType || "free"}
-                                onChange={(e) => handleUpdatePlan(u.id, e.target.value)}
-                                className="bg-slate-50 border border-slate-200 text-xs font-bold px-3 py-2 rounded-lg outline-none focus:border-blue-500 cursor-pointer text-slate-700"
-                              >
-                                <option value="free">Free</option>
-                                <option value="basico">Básico</option>
-                                <option value="avanzado">Avanzado</option>
-                                <option value="profesional">Profesional</option>
-                                <option value="corporativo">Corporativo</option>
-                              </select>
+                             <div className="flex flex-col gap-2">
+                               <select
+                                 value={u.subscriptionType || "free"}
+                                 onChange={(e) => handleUpdatePlan(u.id, e.target.value)}
+                                 className="bg-slate-50 border border-slate-200 text-xs font-bold px-3 py-2 rounded-lg outline-none focus:border-blue-500 cursor-pointer text-slate-700 w-full"
+                               >
+                                 <option value="free">Free</option>
+                                 <option value="basico">Básico</option>
+                                 <option value="avanzado">Avanzado</option>
+                                 <option value="profesional">Profesional</option>
+                                 <option value="corporativo">Corporativo</option>
+                               </select>
+                               <button
+                                 onClick={() => setUserToDelete(u)}
+                                 className="flex justify-center items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-red-600 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors w-full"
+                               >
+                                 <Trash2 size={14} />
+                                 Eliminar Usuario
+                               </button>
+                             </div>
                            ) : (
                              <div className="flex items-center gap-2">
                                {u.isPremium ? (
@@ -737,6 +780,54 @@ export const SuperAdminView = ({ user }: { user: any }) => {
           )}
         </motion.div>
       </div>
+
+      {/* Delete User Modal */}
+      {userToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl p-6 shadow-xl w-full max-w-md border border-slate-200"
+          >
+            <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mb-4">
+              <Trash2 size={24} />
+            </div>
+            <h3 className="text-xl font-black text-slate-900 mb-2">Eliminar Usuario Permanentemente</h3>
+            <p className="text-sm text-slate-500 mb-6">
+              ¿Estás seguro que deseas eliminar a <strong>{userToDelete.displayName || userToDelete.email}</strong>? 
+              Se borrarán todos sus datos y no podrá volver a iniciar sesión. Esta acción es irreversible.
+            </p>
+            {deleteError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs font-bold rounded-xl whitespace-pre-wrap">
+                {deleteError}
+              </div>
+            )}
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => setUserToDelete(null)}
+                disabled={deletingUser}
+                className="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-100 rounded-xl transition-colors disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleDeleteUser}
+                disabled={deletingUser}
+                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-bold rounded-xl flex items-center gap-2 transition-colors disabled:opacity-50 shadow-sm"
+              >
+                {deletingUser ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                    Eliminando...
+                  </>
+                ) : (
+                  "Eliminar Definitivamente"
+                )}
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   );
 };
